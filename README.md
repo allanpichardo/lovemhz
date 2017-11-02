@@ -1,0 +1,1 @@
+This is a web-based synthesizer with a sequencer that uses the WebAudio API.

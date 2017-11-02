@@ -1,0 +1,13 @@
+.Panel {
+    background-color: lightgray;
+}
+.Sequencer {
+    border-radius: 5px;
+    background-color: #97cce8;
+}
+.has-border-right {
+    border-right: 1px solid black;
+}
+input:checked {
+    border: 6px solid red;
+}
