@@ -5,9 +5,32 @@
     border-radius: 5px;
     background-color: #97cce8;
 }
+.Sequencer input:checked {
+    border: 6px solid red;
+    color: orangered;
+}
+.Sequencer input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+
+    border: 1px solid gray;
+    transition: 0.1s all linear;
+    outline: none;
+    margin-right: 5px;
+
+    position: relative;
+    top: 4px;
+
+    background-color: white;
+}
+.Sequencer input:disabled {
+    background-color: gray;
+}
 .has-border-right {
     border-right: 1px solid black;
-}
-input:checked {
-    border: 6px solid red;
 }

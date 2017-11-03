@@ -54,10 +54,7 @@ export default class Transport extends Component {
         let sequenceTime = Transport.bpmToMs(this.state.bpm);
 
         if(timer) {
-            clearInterval(timer);
-            timer = setInterval(() => {
-                this.handleTick();
-            }, sequenceTime);
+            timer.interval = sequenceTime;
 
             let newState = {
                 step: this.state.step,
@@ -74,12 +71,13 @@ export default class Transport extends Component {
         let sequenceTime = Transport.bpmToMs(this.state.bpm);
 
         if(isStarted) {
-            timer = setInterval(() => {
+            timer = new Timer(() => {
                 this.handleTick();
             }, sequenceTime);
+            timer.start();
         } else {
             if(timer) {
-                clearInterval(timer);
+                timer.stop();
                 timer = null;
             }
         }

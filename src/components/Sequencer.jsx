@@ -59,17 +59,17 @@ export default class Sequencer extends Component {
         this.props.onNewSequence(notes);
     }
 
+    lightStep(i) {
+        let lastStep = i > 0 ? i - 1 : 15;
+        $(`#step-${i}`).attr('checked', true);
+        $(`#step-${lastStep}`).removeAttr('checked');
+    }
+
     getStepMarkers() {
         let stepMarkers = [];
         for(let i = 0; i < this.props.steps; ++i) {
-            let marker = <td><input type="radio" name={`step-${i}`} id={`step-${i}`} onClick={(e) => {
-                e.preventDefault()
-            }}/></td>;
-            if(i === this.props.step) {
-                marker = <td><input type="radio" name={`step-${i}`} id={`step-${i}`} onClick={(e) => {
-                    e.preventDefault()
-                }} checked/></td>;
-            }
+            let marker = <td><input className="stepMarker" type="radio" name={`step-${i}`} id={`step-${i}`} disabled="disabled" /></td>;
+
             stepMarkers.push(marker);
         }
         return stepMarkers;
@@ -78,6 +78,8 @@ export default class Sequencer extends Component {
     render() {
         let steps = this.getSteps();
         let stepMarkers = this.getStepMarkers();
+
+        this.lightStep(this.props.step);
 
         return (
             <div className="">
