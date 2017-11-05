@@ -7,6 +7,7 @@ import ADSR from "./ADSR";
 import Sequencer from "./Sequencer";
 import LowpassFilter from "./LowpassFilter";
 import HighpassFilter from "./HighpassFilter.jsx";
+import Calculations from "../utility/Calculations";
 
 export default class Synth extends Component {
 
@@ -26,14 +27,14 @@ export default class Synth extends Component {
                 waveform: 'sine',
                 octave: 0,
             },
-            voices: [null, null, null, null],
+            voices: [[],[]],
         };
 
         this.handleTick = this.handleTick.bind(this);
-        this.getStateCopy = this.getStateCopy(this);
-        this.handleMix1Changed = this.handleMix1Changed(this);
-        this.handleOctave1Changed = this.handleOctave1Changed(this);
-        //this.handleWaveform1Changed = this.handleWaveform1Changed(this);
+        this.getStateCopy = this.getStateCopy.bind(this);
+        this.playStep = this.playStep.bind(this);
+        this.resetAllVoices = this.resetAllVoices.bind(this);
+        this.initVoices = this.initVoices.bind(this);
     }
 
     componentDidMount() {
@@ -44,6 +45,8 @@ export default class Synth extends Component {
         }
         this.oscGain1 = this.audioContext.createGain();
         this.oscGain2 = this.audioContext.createGain();
+
+        this.initVoices();
     }
 
     getStateCopy() {
@@ -64,26 +67,81 @@ export default class Synth extends Component {
         };
     }
 
-    playTone(freq, oscNumber) {
-        let osc = this.audioContext.createOscillator();
+    initVoices() {
+        let voices = [ [],[] ];
 
-        if(oscNumber === 1) {
-            osc.connect(this.oscGain1);
-            osc.type = this.state.osc1.waveform;
-        } else if(oscNumber === 2) {
-            osc.connect(this.oscGain2);
-            osc.type = this.state.osc2.waveform;
+        for(let i = 0; i < 4; ++i) {
+            voices[0].push(this.audioContext.createOscillator());
+            voices[1].push(this.audioContext.createOscillator());
         }
 
-        osc.frequency.value = freq;
-        osc.start();
+        voices.forEach((osc, i) => {
+            osc.forEach((voice) => {
+                if(i === 0) {
+                    voice.connect(this.oscGain1);
+                } else {
+                    voice.connect(this.oscGain2);
+                }
+            });
+        });
 
-        return osc;
+        this.oscGain1.connect(this.audioContext.destination);
+        this.oscGain2.connect(this.audioContext.destination);
+
+        let newState = this.getStateCopy();
+        newState.voices = voices;
+        this.setState(newState);
+    }
+
+    playStep() {
+        this.state.voices[0].forEach((voice, i) => {
+            let notes = this.state.sequence[i][this.state.step];
+            if(voice) {
+                if(notes) {
+                    let freq = Calculations.shiftToOctave(notes, this.state.osc1.octave);
+                    voice.frequency.value = freq;
+                    try {
+                        voice.start();
+                    }catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+        });
+        this.state.voices[1].forEach((voice, i) => {
+            let notes = this.state.sequence[i][this.state.step];
+            if(voice) {
+                if(notes) {
+                    let freq = Calculations.shiftToOctave(notes, this.state.osc2.octave);
+                    voice.frequency.value = freq;
+                    try {
+                        voice.start();
+                    }catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+        });
+    }
+
+    resetAllVoices() {
+        this.state.voices.forEach((osc) => {
+            osc.forEach((voice) => {
+                if(voice) {
+                    try {
+                        voice.stop();
+                        this.initVoices();
+                    } catch (e) {
+                        //ignore
+                    }
+                }
+            });
+        });
     }
 
     handleNewSequence(notes) {
         let newState = this.getStateCopy();
-        newState.notes = notes;
+        newState.sequence = notes;
         this.setState(newState);
     }
 
@@ -91,18 +149,27 @@ export default class Synth extends Component {
         let newState = this.getStateCopy();
         newState.step = step;
         this.setState(newState);
+
+        this.resetAllVoices();
+        this.playStep()
     }
 
     handleWaveform1Changed(waveform) {
         let newState = this.getStateCopy();
         newState.osc1.waveform = waveform;
         this.setState(newState);
+
+        this.state.voices[0].forEach((voice) => {
+            voice.type = this.state.osc1.waveform;
+        });
     }
 
     handleMix1Changed(mix) {
         let newState = this.getStateCopy();
         newState.osc1.mix = mix;
         this.setState(newState);
+
+        this.oscGain1.gain.value = mix;
     }
 
     handleOctave1Changed(octave) {
