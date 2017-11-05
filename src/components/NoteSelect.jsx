@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import 'bulma/css/bulma.css';
 import 'jquery-knob';
+import Calculations from "../utility/Calculations";
 
 export default class NoteSelect extends Component {
 
@@ -30,51 +30,51 @@ export default class NoteSelect extends Component {
                     <div className="modal-card-body">
                         <div className="control">
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="C" onClick={() => {this.props.onNoteSelected('C')}}/>
+                                <input type="radio" name={this.getRadioName()} value="C" onClick={() => {this.props.onNoteSelected(Calculations.C0)}}/>
                                     C
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="C#" onClick={() => {this.props.onNoteSelected('C#')}}/>
+                                <input type="radio" name={this.getRadioName()} value="C#" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(1))}}/>
                                     C#
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="D" onClick={() => {this.props.onNoteSelected('D')}}/>
+                                <input type="radio" name={this.getRadioName()} value="D" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(2))}}/>
                                     D
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="D#" onClick={() => {this.props.onNoteSelected('D#')}}/>
+                                <input type="radio" name={this.getRadioName()} value="D#" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(3))}}/>
                                     D#
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="E" onClick={() => {this.props.onNoteSelected('E')}}/>
+                                <input type="radio" name={this.getRadioName()} value="E" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(4))}}/>
                                     E
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="F" onClick={() => {this.props.onNoteSelected('F')}}/>
+                                <input type="radio" name={this.getRadioName()} value="F" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(5))}}/>
                                     F
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="F#" onClick={() => {this.props.onNoteSelected('F#')}}/>
+                                <input type="radio" name={this.getRadioName()} value="F#" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(6))}}/>
                                     F#
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="G" onClick={() => {this.props.onNoteSelected('G')}}/>
+                                <input type="radio" name={this.getRadioName()} value="G" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(7))}}/>
                                     G
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="G#" onClick={() => {this.props.onNoteSelected('G#')}}/>
+                                <input type="radio" name={this.getRadioName()} value="G#" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(8))}}/>
                                     G#
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="A" onClick={() => {this.props.onNoteSelected('A')}}/>
+                                <input type="radio" name={this.getRadioName()} value="A" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(9))}}/>
                                     A
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="A#" onClick={() => {this.props.onNoteSelected('A#')}}/>
+                                <input type="radio" name={this.getRadioName()} value="A#" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(10))}}/>
                                     A#
                             </label>
                             <label className="radio">
-                                <input type="radio" name={this.getRadioName()} value="B" onClick={() => {this.props.onNoteSelected('B')}}/>
+                                <input type="radio" name={this.getRadioName()} value="B" onClick={() => {this.props.onNoteSelected(Calculations.noteToFrequency(11))}}/>
                                 B
                             </label>
                         </div>

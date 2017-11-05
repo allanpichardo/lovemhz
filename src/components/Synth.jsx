@@ -15,14 +15,100 @@ export default class Synth extends Component {
 
         this.state = {
             step: 0,
-            sequence: [ [],[],[],[] ]
+            sequence: [ [],[],[],[] ],
+            osc1: {
+                mix: 50,
+                waveform: 'sine',
+                octave: 0,
+            },
+            osc2: {
+                mix: 50,
+                waveform: 'sine',
+                octave: 0,
+            },
+            voices: [null, null, null, null],
         };
 
         this.handleTick = this.handleTick.bind(this);
+        this.getStateCopy = this.getStateCopy(this);
+        this.handleMix1Changed = this.handleMix1Changed(this);
+        this.handleOctave1Changed = this.handleOctave1Changed(this);
+        //this.handleWaveform1Changed = this.handleWaveform1Changed(this);
     }
 
     componentDidMount() {
+        if('webkitAudioContext' in window) {
+            this.audioContext = new window.webkitAudioContext();
+        } else {
+            this.audioContext = new window.AudioContext();
+        }
+        this.oscGain1 = this.audioContext.createGain();
+        this.oscGain2 = this.audioContext.createGain();
+    }
 
+    getStateCopy() {
+        return {
+            step: this.state.step,
+            sequence: this.state.sequence,
+            osc1: {
+                mix: this.state.osc1.mix,
+                waveform: this.state.osc1.waveform,
+                octave: this.state.osc1.octave,
+            },
+            osc2: {
+                mix: this.state.osc2.mix,
+                waveform: this.state.osc2.waveform,
+                octave: this.state.osc2.octave,
+            },
+            voices: this.state.voices,
+        };
+    }
+
+    playTone(freq, oscNumber) {
+        let osc = this.audioContext.createOscillator();
+
+        if(oscNumber === 1) {
+            osc.connect(this.oscGain1);
+            osc.type = this.state.osc1.waveform;
+        } else if(oscNumber === 2) {
+            osc.connect(this.oscGain2);
+            osc.type = this.state.osc2.waveform;
+        }
+
+        osc.frequency.value = freq;
+        osc.start();
+
+        return osc;
+    }
+
+    handleNewSequence(notes) {
+        let newState = this.getStateCopy();
+        newState.notes = notes;
+        this.setState(newState);
+    }
+
+    handleTick(step) {
+        let newState = this.getStateCopy();
+        newState.step = step;
+        this.setState(newState);
+    }
+
+    handleWaveform1Changed(waveform) {
+        let newState = this.getStateCopy();
+        newState.osc1.waveform = waveform;
+        this.setState(newState);
+    }
+
+    handleMix1Changed(mix) {
+        let newState = this.getStateCopy();
+        newState.osc1.mix = mix;
+        this.setState(newState);
+    }
+
+    handleOctave1Changed(octave) {
+        let newState = this.getStateCopy();
+        newState.osc1.octave = octave;
+        this.setState(newState);
     }
 
     render() {
@@ -43,10 +129,18 @@ export default class Synth extends Component {
                     </div>
                     <div className="columns">
                         <div className="column is-2">
-                            <Oscillator id="osc1"/>
+                            <Oscillator id="OSC-1"
+                                        onWaveformChanged={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                                        onMixChanged={(mix) => {this.handleMix1Changed(mix)}}
+                                        onOctaveChanged={(octave) => {this.handleOctave1Changed(octave)}}
+                            />
                         </div>
                         <div className="column is-2">
-                            <Oscillator id="osc2"/>
+                            <Oscillator id="OSC-2"
+                                        onWaveformChanged={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                                        onMixChanged={(mix) => {this.handleMix1Changed(mix)}}
+                                        onOctaveChanged={(octave) => {this.handleOctave1Changed(octave)}}
+                            />
                         </div>
                         <div className="column">
                             <div className="columns">
@@ -68,19 +162,4 @@ export default class Synth extends Component {
         );
     }
 
-    handleNewSequence(notes) {
-        let newState = {
-            step: this.state.step,
-            sequence: notes
-        };
-        this.setState(newState);
-    }
-
-    handleTick = (step) => {
-        let newState = {
-            step: step,
-            sequence: this.state.sequence
-        };
-        this.setState(newState);
-    };
 }

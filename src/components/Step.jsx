@@ -3,6 +3,7 @@ import $ from 'jquery';
 import 'bulma/css/bulma.css';
 import 'jquery-knob';
 import NoteSelect from "./NoteSelect";
+import Calculations from "../utility/Calculations";
 
 export default class Step extends Component {
 
@@ -11,7 +12,7 @@ export default class Step extends Component {
 
         this.state = {
             isNoteSelectActive: false,
-            note: 'C'
+            note: Calculations.C0
         };
 
         this.toggleModal = this.toggleModal.bind(this);
