@@ -80,6 +80,9 @@ export default class Transport extends Component {
                 timer.stop();
                 timer = null;
             }
+            if(this.props.onPaused) {
+                this.props.onPaused();
+            }
         }
 
         let newState = {

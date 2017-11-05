@@ -203,6 +203,10 @@ export default class Synth extends Component {
         this.setState(newState);
     }
 
+    handlePaused() {
+        this.resetAllVoices();
+    }
+
     render() {
         return (
             <div className="section">
@@ -213,7 +217,7 @@ export default class Synth extends Component {
                             <h2 className="subtitle">A Synthesizer</h2>
                         </div>
                         <div className="column is-5">
-                            <Transport steps="16" onTick={this.handleTick}/>
+                            <Transport steps="16" onTick={this.handleTick} onPaused={() => {this.handlePaused()}}/>
                         </div>
                         <div className="column is-5">
                             <ADSR/>
