@@ -92,7 +92,7 @@ export default class Transport extends Component {
     };
 
     static bpmToMs(bpm) {
-        return 60000 / bpm;
+        return 60000 / bpm / 2;
     }
 
     static msToBpm(ms) {

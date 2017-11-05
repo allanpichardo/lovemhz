@@ -15,7 +15,11 @@ export default class Oscillator extends Component {
     }
 
     componentDidMount() {
-        $(`#${this.state.knobId}`).knob();
+        $(`#${this.state.knobId}`).knob({
+            'change' : (v) => {
+                this.props.onMixChanged(v / 100);
+            }
+        });
     }
 
     render() {
@@ -38,9 +42,9 @@ export default class Oscillator extends Component {
                 <div className="field">
                     <label className="label">Mix</label>
                     <div className="control">
-                        <input type="text" value="75" id={this.state.knobId} className="knob" data-width="50"
-                               data-height="50" data-displayInput="false" data-angleOffset="180"
-                                onChange={(e) => {this.props.onMixChanged(e.target.value)}}/>
+                        <input type="text" value="50" id={this.state.knobId} className="knob" data-width="50"
+                               data-height="50" data-displayInput="false" data-max="100" data-angleOffset="180"
+                        />
                     </div>
                 </div>
                 <div className="field">
