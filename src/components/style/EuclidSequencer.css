@@ -1,0 +1,41 @@
+/**
+ * Position icons into circle (SO)
+ * http://stackoverflow.com/q/12813573/1397351
+ */
+
+.Euclid {
+
+}
+.st0 {
+    fill: #C20097;
+    stroke: #000000;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+.st1 {
+    fill: none;
+    stroke: #000000;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+.st2 {
+    fill: #FFFFFF;
+}
+.st3 {
+    fill: #750C5E;
+    stroke: #000000;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+.st4 {
+    fill: #FFFFFF;
+    stroke: #000000;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+.st5{
+    fill:#C20097;
+    stroke:#000000;
+    stroke-width:5;
+    stroke-miterlimit:10;
+}

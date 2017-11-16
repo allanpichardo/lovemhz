@@ -8,6 +8,7 @@ import Sequencer from "./Sequencer";
 import LowpassFilter from "./LowpassFilter";
 import HighpassFilter from "./HighpassFilter.jsx";
 import Calculations from "../utility/Calculations";
+import EuclidSequencer from "./EuclidSequencer";
 
 export default class Synth extends Component {
 
@@ -247,7 +248,7 @@ export default class Synth extends Component {
                                     <HighpassFilter id="HPF"/>
                                 </div>
                             </div>
-                            <Sequencer step={this.state.step}
+                            <EuclidSequencer step={this.state.step}
                                        steps="16"
                                        onNewSequence={(notes)=>{this.handleNewSequence(notes)}}
                             />
