@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 import Oscillator from './Oscillator';
 import Transport from "./Transport";
 import ADSR from "./ADSR";
-import Sequencer from "./Sequencer";
 import LowpassFilter from "./LowpassFilter";
 import HighpassFilter from "./HighpassFilter.jsx";
 import Calculations from "../utility/Calculations";
@@ -208,52 +207,78 @@ export default class Synth extends Component {
         this.resetAllVoices();
     }
 
+    getControlsTab() {
+        return (
+            <div>
+                <div className="columns">
+
+                    <div className="column is-5">
+                        <ADSR/>
+                    </div>
+                </div>
+                <div className="columns">
+                    <div className="column is-2">
+                        <Oscillator id="OSC-1"
+                                    onWaveformChanged={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                                    onMixChanged={(mix) => {this.handleMix1Changed(mix)}}
+                                    onOctaveChanged={(octave) => {this.handleOctave1Changed(octave)}}
+                        />
+                    </div>
+                    <div className="column is-2">
+                        <Oscillator id="OSC-2"
+                                    onWaveformChanged={(waveform) => {this.handleWaveform2Changed(waveform)}}
+                                    onMixChanged={(mix) => {this.handleMix2Changed(mix)}}
+                                    onOctaveChanged={(octave) => {this.handleOctave2Changed(octave)}}
+                        />
+                    </div>
+                    <div className="column">
+                        <div className="columns">
+                            <div className="column">
+                                <LowpassFilter id="LPF"/>
+                            </div>
+                            <div className="column">
+                                <HighpassFilter id="HPF"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    getSequencerTab() {
+        return (
+            <EuclidSequencer step={this.state.step}
+                         steps="8"
+                         onNewSequence={(notes)=>{this.handleNewSequence(notes)}}
+        />
+        );
+    }
+
     render() {
         return (
             <div className="section">
                 <div className="container">
                     <div className="columns">
-                        <div className="column is-2">
-                            <h1 className="title">Love MHz</h1>
-                            <h2 className="subtitle">A Synthesizer</h2>
-                        </div>
-                        <div className="column is-5">
-                            <Transport steps="16" onTick={this.handleTick} onPaused={() => {this.handlePaused()}}/>
-                        </div>
-                        <div className="column is-5">
-                            <ADSR/>
-                        </div>
-                    </div>
-                    <div className="columns">
-                        <div className="column is-2">
-                            <Oscillator id="OSC-1"
-                                        onWaveformChanged={(waveform) => {this.handleWaveform1Changed(waveform)}}
-                                        onMixChanged={(mix) => {this.handleMix1Changed(mix)}}
-                                        onOctaveChanged={(octave) => {this.handleOctave1Changed(octave)}}
-                            />
-                        </div>
-                        <div className="column is-2">
-                            <Oscillator id="OSC-2"
-                                        onWaveformChanged={(waveform) => {this.handleWaveform2Changed(waveform)}}
-                                        onMixChanged={(mix) => {this.handleMix2Changed(mix)}}
-                                        onOctaveChanged={(octave) => {this.handleOctave2Changed(octave)}}
-                            />
-                        </div>
                         <div className="column">
-                            <div className="columns">
-                                <div className="column">
-                                    <LowpassFilter id="LPF"/>
-                                </div>
-                                <div className="column">
-                                    <HighpassFilter id="HPF"/>
-                                </div>
+                            <div className="column">
+                                <h1 className="title">Love MHz</h1>
+                                <h2 className="subtitle">A Synthesizer</h2>
                             </div>
-                            <EuclidSequencer step={this.state.step}
-                                       steps="16"
-                                       onNewSequence={(notes)=>{this.handleNewSequence(notes)}}
-                            />
+                            <div className="column">
+                                <Transport steps="8" onTick={this.handleTick} onPaused={() => {this.handlePaused()}}/>
+                            </div>
                         </div>
                     </div>
+                    <div className="tabs">
+                    <ul>
+                        <li className="is-active"><a>Controls</a></li>
+                        <li><a>Sequencer</a></li>
+                        <li><a>Storage</a></li>
+                    </ul>
+                    </div>
+
                 </div>
             </div>
         );

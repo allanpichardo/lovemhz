@@ -6,36 +6,28 @@
 .Euclid {
 
 }
-.st0 {
-    fill: #C20097;
+.Euclid path:hover {
+    stroke: yellow;
+    cursor: pointer;
+}
+.Euclid svg {
+    width: 44vw;
+}
+.oddRing {
+    /*fill: #C20097;*/
+    fill: lightgray;
     stroke: #000000;
     stroke-width: 5;
     stroke-miterlimit: 10;
 }
-.st1 {
-    fill: none;
+.evenRing {
+    /*fill: #750C5E;*/
+    fill: gray;
     stroke: #000000;
     stroke-width: 5;
     stroke-miterlimit: 10;
 }
-.st2 {
-    fill: #FFFFFF;
-}
-.st3 {
-    fill: #750C5E;
-    stroke: #000000;
-    stroke-width: 5;
-    stroke-miterlimit: 10;
-}
-.st4 {
-    fill: #FFFFFF;
-    stroke: #000000;
-    stroke-width: 5;
-    stroke-miterlimit: 10;
-}
-.st5{
-    fill:#C20097;
-    stroke:#000000;
-    stroke-width:5;
-    stroke-miterlimit:10;
+.stepOn {
+    stroke: red;
+    stroke-width: 10px;
 }

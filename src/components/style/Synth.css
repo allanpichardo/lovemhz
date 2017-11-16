@@ -1,6 +1,10 @@
 .Panel {
     background-color: lightgray;
 }
+#bpmInput {
+    width: 50px;
+    height: 100%;
+}
 .Sequencer {
     border-radius: 5px;
     background-color: #97cce8;
