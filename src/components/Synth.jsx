@@ -278,7 +278,7 @@ export default class Synth extends Component {
                         <li><a>Storage</a></li>
                     </ul>
                     </div>
-
+                    {this.getSequencerTab()}
                 </div>
             </div>
         );

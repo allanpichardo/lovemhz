@@ -17,17 +17,17 @@
     /*fill: #C20097;*/
     fill: lightgray;
     stroke: #000000;
-    stroke-width: 5;
+    stroke-width: 0;
     stroke-miterlimit: 10;
 }
 .evenRing {
     /*fill: #750C5E;*/
     fill: gray;
     stroke: #000000;
-    stroke-width: 5;
+    stroke-width: 0;
     stroke-miterlimit: 10;
 }
 .stepOn {
     stroke: red;
-    stroke-width: 10px;
+    stroke-width: 5px;
 }
