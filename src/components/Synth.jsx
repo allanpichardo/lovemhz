@@ -1,4 +1,3 @@
-import 'bulma/css/bulma.css';
 import './style/Synth.css';
 import React, { Component } from 'react';
 import Oscillator from './Oscillator';
@@ -8,6 +7,7 @@ import LowpassFilter from "./LowpassFilter";
 import HighpassFilter from "./HighpassFilter.jsx";
 import Calculations from "../utility/Calculations";
 import EuclidSequencer from "./EuclidSequencer";
+import logo from '../images/logo.svg';
 
 export default class Synth extends Component {
 
@@ -258,27 +258,12 @@ export default class Synth extends Component {
 
     render() {
         return (
-            <div className="section">
-                <div className="container">
-                    <div className="columns">
-                        <div className="column">
-                            <div className="column">
-                                <h1 className="title">Love MHz</h1>
-                                <h2 className="subtitle">A Synthesizer</h2>
-                            </div>
-                            <div className="column">
-                                <Transport steps="8" onTick={this.handleTick} onPaused={() => {this.handlePaused()}}/>
-                            </div>
-                        </div>
+            <div className="mainView">
+                <div className="header">
+                    <Transport/>
+                    <div className="logo">
+                        <img src={logo}/>
                     </div>
-                    <div className="tabs">
-                    <ul>
-                        <li className="is-active"><a>Controls</a></li>
-                        <li><a>Sequencer</a></li>
-                        <li><a>Storage</a></li>
-                    </ul>
-                    </div>
-                    {this.getSequencerTab()}
                 </div>
             </div>
         );

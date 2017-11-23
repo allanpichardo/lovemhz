@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import 'font-awesome/css/font-awesome.min.css'
-import 'bulma/css/bulma.css';
 import 'jquery-knob';
 import TransportButton from "./TransportButton.jsx";
 import Timer from '../utility/Timer';
+import Stepper from "./Stepper";
 
 export default class Transport extends Component {
 
@@ -27,14 +27,17 @@ export default class Transport extends Component {
 
     render() {
         return (
-            <div className="">
-                <div className="field is-grouped">
-                    <label className="label">Tempo&nbsp;</label>
-                    <div className="control">
-                        <input id="bpmInput" className="input" type="number" value={this.state.bpm} onChange={(e) => {this.handleTempoChange(e)}}/>
-                    </div>
-                    <TransportButton onTransportToggle={this.handleTransportToggle}/>
+            <div className="transport">
+                <TransportButton onTransportToggle={this.handleTransportToggle} onStop={this.handleStop}/>
+                <div className="tempoBox">
+                    <span>Tempo</span><Stepper default={120} min={1} max={620}/>
                 </div>
+                {/*<div className="field is-grouped">*/}
+                    {/*<label className="label">Tempo&nbsp;</label>*/}
+                    {/*<div className="control">*/}
+                        {/*<input id="bpmInput" className="input" type="number" value={this.state.bpm} onChange={(e) => {this.handleTempoChange(e)}}/>*/}
+                    {/*</div>*/}
+                {/*</div>*/}
             </div>
         );
     }
@@ -64,6 +67,10 @@ export default class Transport extends Component {
             };
             this.setState(newState);
         }
+    }
+
+    handleStop() {
+        //todo: handle it!
     }
 
     handleTransportToggle = (isStarted) => {

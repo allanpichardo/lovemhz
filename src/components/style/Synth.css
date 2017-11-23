@@ -1,40 +1,69 @@
-.Panel {
-    background-color: lightgray;
+.mainView {
+    height: 100vh;
+    width: 100vw;
 }
-#bpmInput {
-    width: 50px;
-    height: 100%;
+.component {
+    display:inline-block;
 }
-.Sequencer {
-    border-radius: 5px;
-    background-color: #97cce8;
+.header {
+    border: 1pt solid;
+    border-color: var(--color-yellow-bright);
+    height: 75px;
+    width: 100%;
+    position:absolute;
+    padding: 20px 45px;
 }
-.Sequencer input:checked {
-    border: 6px solid red;
-    color: orangered;
+.transportButton {
+    padding: 10px;
+    height: 33px;
+    width: 33px;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    text-align:center;
+    color: white;
+    margin-right: 10px;
 }
-.Sequencer input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-
-    border: 1px solid gray;
-    transition: 0.1s all linear;
-    outline: none;
-    margin-right: 5px;
-
-    position: relative;
-    top: 4px;
-
-    background-color: white;
+.playButton {
+    background-color: var(--color-green-bright);
 }
-.Sequencer input:disabled {
-    background-color: gray;
+.pauseButton {
+    background-color: var(--color-green-dark);
 }
-.has-border-right {
-    border-right: 1px solid black;
+.stopButton {
+    background-color: var(--color-purple-bright);
+}
+.tempoBox {
+    display:flex;
+    align-items:center;
+    margin-left: 48px;
+}
+.tempoBox span {
+    margin-top: -8px;
+}
+.stepper {
+    display: inline-flex;
+    align-items: center;
+}
+.stepButton {
+    box-sizing: border-box;
+    height: 30px;
+    width: 30px;
+}
+.stepInput {
+    box-sizing: border-box;
+    height: 30px;
+    margin-top: -6px;
+    width: 45px;
+    text-align: center;
+    font-size: 1.5em;
+}
+.transport {
+    display: inline-flex;
+    align-items:center;
+}
+.logo {
+    width: 86px;
+    position:absolute;
+    right:45px;
 }
