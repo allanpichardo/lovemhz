@@ -35,6 +35,7 @@ export default class Stepper extends Component {
             let idx = this.state.itemIndex;
             let val = this.state.items[idx];
             this.input.value = val;
+            this.props.onChange(val);
             this.setState({
                 itemIndex: (idx - 1) % this.state.items.length,
                 value: val,
@@ -45,6 +46,7 @@ export default class Stepper extends Component {
                 val = val - 1;
             }
             this.input.value = val;
+            this.props.onChange(val);
             this.setState({
                 value: val,
             });
@@ -56,6 +58,7 @@ export default class Stepper extends Component {
             let idx = this.state.itemIndex;
             let val = this.state.items[idx];
             this.input.value = val;
+            this.props.onChange(val);
             this.setState({
                 itemIndex: (idx + 1) % this.state.items.length,
                 value: val,
@@ -66,6 +69,7 @@ export default class Stepper extends Component {
                 val = val + 1;
             }
             this.input.value = val;
+            this.props.onChange(val);
             this.setState({
                 value: val,
             });

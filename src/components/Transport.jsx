@@ -30,21 +30,13 @@ export default class Transport extends Component {
             <div className="transport">
                 <TransportButton onTransportToggle={this.handleTransportToggle} onStop={this.handleStop}/>
                 <div className="tempoBox">
-                    <span>Tempo</span><Stepper default={120} min={1} max={620}/>
+                    <span>Tempo</span><Stepper default={this.state.bpm} min={1} max={620} onChange={(newTempo) => {this.handleTempoChange(newTempo)}}/>
                 </div>
-                {/*<div className="field is-grouped">*/}
-                    {/*<label className="label">Tempo&nbsp;</label>*/}
-                    {/*<div className="control">*/}
-                        {/*<input id="bpmInput" className="input" type="number" value={this.state.bpm} onChange={(e) => {this.handleTempoChange(e)}}/>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
             </div>
         );
     }
 
-    handleTempoChange(e) {
-        let bpm = $('#bpmInput').val();
-
+    handleTempoChange(bpm) {
         let newState = {
             timer: this.state.timer,
             step: this.state.step,
