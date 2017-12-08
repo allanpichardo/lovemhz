@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import 'jquery-knob';
-import './style/Synth.css';
 import stepLeft from '../images/ic_step_left.svg';
 import stepRight from '../images/ic_step_right.svg';
 

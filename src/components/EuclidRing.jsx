@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import 'bulma/css/bulma.css';
-import './style/Synth.css';
 import './style/EuclidSequencer.css';
 import 'jquery-knob';
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import 'bulma/css/bulma.css';
 import 'jquery-knob';
 import NoteSelect from "./NoteSelect";
 import Calculations from "../utility/Calculations";

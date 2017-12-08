@@ -1,4 +1,3 @@
-import './style/Synth.css';
 import React, { Component } from 'react';
 import Oscillator from './Oscillator';
 import Transport from "./Transport";
@@ -8,6 +7,7 @@ import HighpassFilter from "./HighpassFilter.jsx";
 import Calculations from "../utility/Calculations";
 import EuclidSequencer from "./EuclidSequencer";
 import logo from '../images/logo.svg';
+import Tab from "./Tab";
 
 export default class Synth extends Component {
 
@@ -35,6 +35,7 @@ export default class Synth extends Component {
         this.playStep = this.playStep.bind(this);
         this.resetAllVoices = this.resetAllVoices.bind(this);
         this.getVoicesFor = this.getVoicesFor.bind(this);
+        this.handleTabSelected = this.handleTabSelected.bind(this);
     }
 
     componentDidMount() {
@@ -49,6 +50,8 @@ export default class Synth extends Component {
 
         this.oscGain1.connect(this.audioContext.destination);
         this.oscGain2.connect(this.audioContext.destination);
+
+        this.handleTabSelected(document.querySelector('.sequencer'));
     }
 
     getStateCopy() {
@@ -207,6 +210,10 @@ export default class Synth extends Component {
         this.resetAllVoices();
     }
 
+    handleTabSelected(element) {
+        element.classList.add('tab_selected');
+    }
+
     getControlsTab() {
         return (
             <div>
@@ -249,22 +256,25 @@ export default class Synth extends Component {
 
     getSequencerTab() {
         return (
+            <div className="content">
             <EuclidSequencer step={this.state.step}
                          steps="8"
                          onNewSequence={(notes)=>{this.handleNewSequence(notes)}}
-        />
+            />
+            </div>
         );
     }
 
     render() {
         return (
-            <div className="mainView">
-                <div className="header">
-                    <Transport/>
-                    <div className="logo">
-                        <img src={logo}/>
-                    </div>
+            <div className="wrapper">
+                <Transport/>
+                <div className="branding">
+                    <img src={logo}/>
                 </div>
+                <Tab tabClass="sequencer" title="Sequencer" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
+                <Tab tabClass="controls" title="Controls" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
+                {this.getSequencerTab()}
             </div>
         );
     }

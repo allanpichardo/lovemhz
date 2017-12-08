@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import 'bulma/css/bulma.css';
 import 'jquery-knob';
 
 export default class ADSR extends Component {

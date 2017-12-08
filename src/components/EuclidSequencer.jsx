@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import 'bulma/css/bulma.css';
-import './style/Synth.css';
 import './style/EuclidSequencer.css';
 import 'jquery-knob';
 import EuclidRing from "./EuclidRing";
@@ -52,24 +50,48 @@ export default class Sequencer extends Component {
 
     render() {
         return (
-            <div className="Euclid columns">
-                <div className="columns">
-                    <div className="column">
-                        <svg version="1.1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             xmlnsXlink="http://www.w3.org/1999/xlink"
-                             x="0px"
-                             y="0px"
-                             width="558.7px"
-                             height="558.7px"
-                             viewBox="0 0 558.7 558.7"
-	                            xmlSpace="preserve">
-                            <EuclidRing channel="1" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                            <EuclidRing channel="2" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                            <EuclidRing channel="3" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                            <EuclidRing channel="4" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        </svg>
-                    </div>
+            <div className="Euclid">
+                <div className="ring">
+                    <svg version="1.1"
+                         xmlns="http://www.w3.org/2000/svg"
+                         xmlnsXlink="http://www.w3.org/1999/xlink"
+                         x="0px"
+                         y="0px"
+                         width="558.7px"
+                         height="558.7px"
+                         viewBox="0 0 558.7 558.7"
+                         xmlSpace="preserve">
+                        <EuclidRing channel="1" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing channel="2" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing channel="3" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing channel="4" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                    </svg>
+                </div>
+                <div className="divider">
+                    <div>Track</div>
+                    <div>Note</div>
+                    <div>Onsets</div>
+                    <div>Offset</div>
+
+                    <div>1</div>
+                    <div>Note</div>
+                    <div>Onsets</div>
+                    <div>Offset</div>
+
+                    <div>2</div>
+                    <div>Note</div>
+                    <div>Onsets</div>
+                    <div>Offset</div>
+
+                    <div>3</div>
+                    <div>Note</div>
+                    <div>Onsets</div>
+                    <div>Offset</div>
+
+                    <div>4</div>
+                    <div>Note</div>
+                    <div>Onsets</div>
+                    <div>Offset</div>
                 </div>
             </div>
         );

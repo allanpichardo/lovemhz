@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import $ from 'jquery';
 import 'font-awesome/css/font-awesome.min.css'
 import 'jquery-knob';
-import './style/Synth.css';
 
 export default class TransportButton extends Component {
 
@@ -24,10 +23,10 @@ export default class TransportButton extends Component {
     render() {
         return (
             <div>
-                    <a id="playButton" className="transportButton playButton" onClick={this.handlePlayClicked}>
+                    <a id="playButton" href="#" className="transportButton playButton" onClick={this.handlePlayClicked}>
                             <i id="playButtonIcon" className="fa fa-play"/>
                     </a>
-                    <a id="stopButton" className="transportButton stopButton" onClick={this.handleStopClicked}>
+                    <a id="stopButton" href="#" className="transportButton stopButton" onClick={this.handleStopClicked}>
                             <i id="stopButtonIcon" className="fa fa-stop"/>
                     </a>
             </div>

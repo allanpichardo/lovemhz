@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import 'bulma/css/bulma.css';
-import './style/Synth.css';
 import 'jquery-knob';
 
 export default class Oscillator extends Component {

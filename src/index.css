@@ -9,14 +9,138 @@
   --color-yellow-bright: #ffd507;
 }
 
+html {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--color-yellow-dark);
   color:white;
   font-family: 'Space Mono', monospace;
   font-size: 18px;
+  margin: 0;
 }
 
-div {
-  display:inline-block;
+a {
+  text-decoration: none;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-rows: 50px 1fr 1fr;
+  grid-template-columns: 50px 1fr 1fr;
+  grid-template-areas:
+          "   . tran bran"
+          "stab cont cont"
+          "ctab cont cont";
+  height: 100vh;
+  max-width: 100vw;
+}
+
+.transport {
+  grid-area: tran;
+}
+
+.branding {
+  grid-area: bran;
+  text-align: end;
+  margin-right: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.branding img {
+  height: 100%;
+}
+
+.tab {
+  text-orientation: sideways;
+  writing-mode: vertical-lr;
+  height: 100%;
+  text-align:center;
+  margin-left: auto;
+}
+.tab a {
+  color: white;
+}
+.tab a:hover {
+  color: var(--color-purple-bright);
+}
+
+.sequencer {
+  grid-area: stab;
+}
+
+.controls {
+  grid-area: ctab;
+}
+
+.tab_selected {
+  border-right: 5px solid var(--color-purple-bright);
+}
+
+.content {
+  grid-area: cont;
+  grid-column-end: span 2;
+  grid-row-end: span 2;
+}
+
+
+.transportButton {
+  padding: 7px;
+  height: 24px;
+  width: 24px;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content:center;
+  color: white;
+  margin-right: 10px;
+}
+.playButton {
+  background-color: var(--color-green-bright);
+}
+.pauseButton {
+  background-color: var(--color-green-dark);
+}
+.stopButton {
+  background-color: var(--color-purple-bright);
+}
+.tempoBox {
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  margin-left: 48px;
+}
+.tempoBox span {
+  /*margin-top: -8px;*/
+}
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom:10px;
+  margin-top:10px;
+}
+.stepButton {
+  margin-top: 10px;
+  height: 30px;
+  width: 30px;
+}
+.stepInput {
   box-sizing: border-box;
+  height: 32px;
+  width: 45px;
+  text-align: center;
+  font-size: 1em;
+  margin-top:4px;
+}
+.transport {
+  display: inline-flex;
+  align-items:center;
+}
+.logo {
+  width: 86px;
+  position:absolute;
+  right:45px;
 }

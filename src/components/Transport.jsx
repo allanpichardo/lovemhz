@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import 'font-awesome/css/font-awesome.min.css'
 import 'jquery-knob';
 import TransportButton from "./TransportButton.jsx";

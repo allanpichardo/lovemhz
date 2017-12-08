@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Space+Mono:700&subset=latin-ext');
+
+:root {
+    --color-yellow-dark: #d1b00c;
+    --color-purple-bright: #c20097;
+    --color-purple-dark: #750c5e;
+    --color-green-bright: #0e8f8b;
+    --color-green-dark: #044f4d;
+    --color-yellow-bright: #ffd507;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-yellow-dark);
+    color:white;
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    margin: 0;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-rows: 50px 1fr 1fr;
+    grid-template-columns: 50px 1fr 1fr;
+    grid-template-areas:
+        "   . tran bran"
+        "stab cont cont"
+        "ctab cont cont";
+    min-height: 100vh;
+    max-width: 100vw;
+}
+
+.transport {
+    grid-area: tran;
+}
+
+.branding {
+    grid-area: bran;
+}
+
+.tab {
+    text-orientation: sideways;
+    writing-mode: vertical-lr;
+    height: 100%;
+    text-align:center;
+    margin-left: auto;
+}
+
+.sequencer {
+    grid-area: stab;
+}
+
+.controls {
+    grid-area: ctab;
+}
+
+.tab_selected {
+    border-right: 5px solid var(--color-purple-bright);
+}
+
+.content {
+    grid-area: cont;
+}
