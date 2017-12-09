@@ -17,7 +17,7 @@ body {
   background-color: var(--color-yellow-dark);
   color:white;
   font-family: 'Space Mono', monospace;
-  font-size: 18px;
+  font-size: 1em;
   margin: 0;
 }
 

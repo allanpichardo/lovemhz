@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './style/EuclidSequencer.css';
 import 'jquery-knob';
 import EuclidRing from "./EuclidRing";
+import Stepper from "./Stepper";
 
 export default class Sequencer extends Component {
 
@@ -10,6 +11,9 @@ export default class Sequencer extends Component {
 
         this.initNoteMatrix = this.initNoteMatrix.bind(this);
         this.handleStepClicked = this.handleStepClicked.bind(this);
+        this.handleNoteChange = this.handleNoteChange.bind(this);
+        this.handleOnsetChange = this.handleOnsetChange.bind(this);
+        this.handleOffsetChange = this.handleOffsetChange.bind(this);
 
         this.state = {
             notes: this.initNoteMatrix()
@@ -48,7 +52,22 @@ export default class Sequencer extends Component {
         console.log(e);
     }
 
+    handleNoteChange(track, note) {
+        //todo: acknowledge note change for this track
+    }
+
+    handleOnsetChange(track, onsets) {
+
+    }
+
+    handleOffsetChange(track, offset) {
+
+    }
+
     render() {
+
+        let noteValues = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'B#'];
+
         return (
             <div className="Euclid">
                 <div className="ring">
@@ -74,24 +93,24 @@ export default class Sequencer extends Component {
                     <div>Offset</div>
 
                     <div>1</div>
-                    <div>Note</div>
-                    <div>Onsets</div>
-                    <div>Offset</div>
+                    <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(0, val)}}/>
+                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(0, val)}}/>
+                    <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(0, val)}}/>
 
                     <div>2</div>
-                    <div>Note</div>
-                    <div>Onsets</div>
-                    <div>Offset</div>
+                    <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(1, val)}}/>
+                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(1, val)}}/>
+                    <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(1, val)}}/>
 
                     <div>3</div>
-                    <div>Note</div>
-                    <div>Onsets</div>
-                    <div>Offset</div>
+                    <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(2, val)}}/>
+                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(2, val)}}/>
+                    <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(2, val)}}/>
 
                     <div>4</div>
-                    <div>Note</div>
-                    <div>Onsets</div>
-                    <div>Offset</div>
+                    <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(3, val)}}/>
+                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(3, val)}}/>
+                    <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(3, val)}}/>
                 </div>
             </div>
         );

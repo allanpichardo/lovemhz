@@ -6,15 +6,18 @@
 .Euclid {
     display: grid;
     grid-template-rows: 100%;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 3fr;
     grid-template-areas: "ring divider";
     min-height: 100%;
     justify-items: center;
     align-items: center;
 }
+
 .ring {
     grid-area: ring;
+    margin-left: 10px;
 }
+
 .divider {
     grid-area: divider;
     display: grid;
@@ -27,6 +30,8 @@
     grid-auto-columns: 1fr;
     justify-items: center;
     align-items: center;
+    grid-gap: 10px;
+    font-size: 1.5em;
 }
 
 .Euclid path:hover {

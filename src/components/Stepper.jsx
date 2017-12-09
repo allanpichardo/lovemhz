@@ -10,7 +10,7 @@ export default class Stepper extends Component {
 
 
         this.state = {
-            value: this.props.default,
+            value: this.props.items ? this.props.items[0] : this.props.default,
             itemIndex: 0,
             items: this.props.items,
         }
@@ -30,14 +30,16 @@ export default class Stepper extends Component {
 
     leftClicked() {
         if(this.hasItems()) {
-            let idx = this.state.itemIndex;
-            let val = this.state.items[idx];
-            this.input.value = val;
-            this.props.onChange(val);
-            this.setState({
-                itemIndex: (idx - 1) % this.state.items.length,
-                value: val,
-            });
+            if(this.state.itemIndex > 0) {
+                let idx = (this.state.itemIndex - 1);
+                let val = this.state.items[idx];
+                this.input.value = val;
+                this.props.onChange(val);
+                this.setState({
+                    itemIndex: idx,
+                    value: val,
+                });
+            }
         } else {
             let val = parseInt(this.state.value);
             if(val > parseInt(this.props.min)) {
@@ -53,14 +55,16 @@ export default class Stepper extends Component {
 
     rightClicked() {
         if(this.hasItems()) {
-            let idx = this.state.itemIndex;
-            let val = this.state.items[idx];
-            this.input.value = val;
-            this.props.onChange(val);
-            this.setState({
-                itemIndex: (idx + 1) % this.state.items.length,
-                value: val,
-            });
+            if(this.state.itemIndex < this.state.items.length - 1) {
+                let idx = this.state.itemIndex + 1;
+                let val = this.state.items[idx];
+                this.input.value = val;
+                this.props.onChange(val);
+                this.setState({
+                    itemIndex: idx,
+                    value: val,
+                });
+            }
         } else {
             let val = parseInt(this.state.value);
             if(val < parseInt(this.props.max)) {
@@ -77,11 +81,11 @@ export default class Stepper extends Component {
     render() {
         return (
             <div className="stepper">
-                <a>
+                <a href="#">
                     <img className="stepButton" src={stepLeft} onClick={this.leftClicked}/>
                 </a>
                 <input className="stepInput" defaultValue={this.state.value} ref={(input) => this.input = input} readOnly/>
-                <a>
+                <a href="#">
                     <img className="stepButton" src={stepRight} onClick={this.rightClicked}/>
                 </a>
             </div>
