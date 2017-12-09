@@ -30,7 +30,7 @@
     grid-auto-columns: 1fr;
     justify-items: center;
     align-items: center;
-    grid-gap: 10px;
+    grid-gap: 12px;
     font-size: 1.5em;
 }
 
@@ -38,7 +38,7 @@
     fill: var(--color-yellow-bright);
     cursor: pointer;
 }
-.Euclid svg {
+.Euclid #ring_svg {
     width: 44vw;
 }
 .oddRing {
@@ -76,7 +76,7 @@
         grid-template-columns: 100%;
         grid-template-areas: "ring" "divider";
         justify-items: center;
-        align-items: center;
+        align-items: start;
         max-width: 100vw;
         min-height: 100vh;
     }
@@ -86,7 +86,7 @@
         margin-top: 10px;
     }
 
-    .Euclid svg {
+    .Euclid #ring_svg {
         width: 100%;
         height: 325px;
     }

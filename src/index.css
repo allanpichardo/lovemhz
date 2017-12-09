@@ -121,21 +121,42 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-bottom:10px;
-  margin-top:10px;
+  max-height: 30px;
+  margin-bottom: 10px;
 }
+
+.stepper svg {
+  width: 30px;
+  height: 30px;
+}
+
+.stepper a {
+  display: inline-flex;
+  align-items: end;
+  max-height: 30px;
+}
+
 .stepButton {
+  fill: var(--color-green-bright);
   margin-top: 10px;
   height: 30px;
   width: 30px;
 }
+
+.stepButton_disabled {
+  fill: var(--color-yellow-dark);
+}
+
 .stepInput {
   box-sizing: border-box;
-  height: 32px;
+  height: 31px;
   width: 45px;
   text-align: center;
   font-size: 1em;
-  margin-top:4px;
+  border:0;
+  margin-bottom: 4px;
+  position: relative;
+  top: 2px;
 }
 .transport {
   display: inline-flex;

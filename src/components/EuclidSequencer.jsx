@@ -71,7 +71,7 @@ export default class Sequencer extends Component {
         return (
             <div className="Euclid">
                 <div className="ring">
-                    <svg version="1.1"
+                    <svg id="ring_svg" version="1.1"
                          xmlns="http://www.w3.org/2000/svg"
                          xmlnsXlink="http://www.w3.org/1999/xlink"
                          x="0px"
