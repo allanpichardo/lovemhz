@@ -1,11 +1,14 @@
 {
-  "main.css": "static/css/main.0512e97c.css",
-  "main.css.map": "static/css/main.0512e97c.css.map",
-  "main.js": "static/js/main.60e7ab81.js",
-  "main.js.map": "static/js/main.60e7ab81.js.map",
+  "main.css": "static/css/main.dfaf4de6.css",
+  "main.css.map": "static/css/main.dfaf4de6.css.map",
+  "main.js": "static/js/main.cc882228.js",
+  "main.js.map": "static/js/main.cc882228.js.map",
   "static/media/fontawesome-webfont.eot": "static/media/fontawesome-webfont.674f50d2.eot",
   "static/media/fontawesome-webfont.svg?v=4.7.0": "static/media/fontawesome-webfont.912ec66d.svg",
   "static/media/fontawesome-webfont.ttf?v=4.7.0": "static/media/fontawesome-webfont.b06871f2.ttf",
   "static/media/fontawesome-webfont.woff2?v=4.7.0": "static/media/fontawesome-webfont.af7ae505.woff2",
-  "static/media/fontawesome-webfont.woff?v=4.7.0": "static/media/fontawesome-webfont.fee66e71.woff"
+  "static/media/fontawesome-webfont.woff?v=4.7.0": "static/media/fontawesome-webfont.fee66e71.woff",
+  "static/media/ic_step_left.svg": "static/media/ic_step_left.ce81b326.svg",
+  "static/media/ic_step_right.svg": "static/media/ic_step_right.e59fabbb.svg",
+  "static/media/logo.svg": "static/media/logo.222f4c02.svg"
 }
