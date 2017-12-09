@@ -68,3 +68,46 @@
 .stepOn{
     fill: var(--color-purple-bright);
 }
+
+@media only screen and (max-width: 900px) {
+
+    .Euclid {
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 100%;
+        grid-template-areas: "ring" "divider";
+        justify-items: center;
+        align-items: center;
+        max-width: 100vw;
+        min-height: 100vh;
+    }
+
+    .ring {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .Euclid svg {
+        width: 100%;
+        height: 325px;
+    }
+
+    .divider {
+        grid-area: divider;
+        display: grid;
+        grid-template-areas:
+                "track_head note_head onset_head offset_head"
+                "t1 n1 on1 off1"
+                "t2 n2 on2 off2"
+                "t3 n3 on3 off3"
+                "t4 n4 on4 off4";
+        grid-template-columns: 0 1fr 1fr 1fr;
+        justify-items: center;
+        align-items: center;
+        grid-gap: 1px;
+
+    }
+
+    .track {
+        visibility: hidden;
+    }
+}

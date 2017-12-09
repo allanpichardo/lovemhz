@@ -88,7 +88,6 @@ a {
   grid-row-end: span 2;
 }
 
-
 .transportButton {
   padding: 7px;
   height: 24px;
@@ -146,4 +145,51 @@ a {
   width: 86px;
   position:absolute;
   right:45px;
+}
+
+@media only screen and (max-width: 900px) {
+  body{
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 84px;
+    grid-template-rows: 50px 30px 1fr;
+    grid-template-areas:
+            "tran tran tran bran"
+            "stab stab ctab ctab"
+            "cont cont cont cont";
+    min-height: 100vh;
+    max-width: 100vw;
+  }
+
+  .content {
+    grid-column: span 4;
+  }
+
+  .branding {
+    margin-right: 10px;
+  }
+
+  .tempoBox {
+    margin-left: 10px;
+  }
+
+  .transportButton {
+    padding: 2px;
+    margin-right:1px;
+  }
+
+  .tab {
+    text-orientation: upright;
+    writing-mode: horizontal-tb;
+    width: 100%;
+    text-align:center;
+  }
+
+  .tab_selected {
+    border-bottom: 5px solid var(--color-purple-bright);
+    border-right: 0;
+  }
 }

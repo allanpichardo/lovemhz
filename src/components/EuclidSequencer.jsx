@@ -87,27 +87,27 @@ export default class Sequencer extends Component {
                     </svg>
                 </div>
                 <div className="divider">
-                    <div>Track</div>
+                    <div className="track">Track</div>
                     <div>Note</div>
                     <div>Onsets</div>
                     <div>Offset</div>
 
-                    <div>1</div>
+                    <div className="track">1</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(0, val)}}/>
                     <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(0, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(0, val)}}/>
 
-                    <div>2</div>
+                    <div className="track">2</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(1, val)}}/>
                     <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(1, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(1, val)}}/>
 
-                    <div>3</div>
+                    <div className="track">3</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(2, val)}}/>
                     <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(2, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(2, val)}}/>
 
-                    <div>4</div>
+                    <div className="track">4</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(3, val)}}/>
                     <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(3, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(3, val)}}/>
