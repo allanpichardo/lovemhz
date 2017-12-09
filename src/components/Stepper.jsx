@@ -11,13 +11,13 @@ export default class Stepper extends Component {
             value: this.props.items ? this.props.items[0] : this.props.default,
             itemIndex: 0,
             items: this.props.items,
-            isLeftEnabled: false,
-            isRightEnabled: false,
         }
 
         this.leftClicked = this.leftClicked.bind(this);
         this.rightClicked = this.rightClicked.bind(this);
         this.hasItems = this.hasItems.bind(this);
+        this.canStepLeft = this.canStepLeft.bind(this);
+        this.canStepRight = this.canStepRight.bind(this);
     }
 
     componentDidMount() {
@@ -31,7 +31,7 @@ export default class Stepper extends Component {
         e.preventDefault();
 
         if(this.hasItems()) {
-            if(this.state.itemIndex > 0) {
+            if(this.canStepLeft()) {
                 let idx = (this.state.itemIndex - 1);
                 let val = this.state.items[idx];
                 this.input.value = val;
@@ -42,8 +42,8 @@ export default class Stepper extends Component {
                 });
             }
         } else {
-            let val = parseInt(this.state.value);
-            if(val > parseInt(this.props.min)) {
+            if(this.canStepLeft()) {
+                let val = parseInt(this.state.value);
                 val = val - 1;
                 this.input.value = val;
                 this.props.onChange(val);
@@ -58,7 +58,7 @@ export default class Stepper extends Component {
         e.preventDefault();
 
         if(this.hasItems()) {
-            if(this.state.itemIndex < this.state.items.length - 1) {
+            if(this.canStepRight()) {
                 let idx = this.state.itemIndex + 1;
                 let val = this.state.items[idx];
                 this.input.value = val;
@@ -69,8 +69,8 @@ export default class Stepper extends Component {
                 });
             }
         } else {
-            let val = parseInt(this.state.value);
-            if(val < parseInt(this.props.max)) {
+            if(this.canStepRight()) {
+                let val = parseInt(this.state.value);
                 val = val + 1;
                 this.input.value = val;
                 this.props.onChange(val);
@@ -83,15 +83,8 @@ export default class Stepper extends Component {
 
     render() {
 
-        let leftClasses = '';
-        let rightClasses = '';
-        if(this.hasItems()) {
-            leftClasses = this.state.itemIndex > 0 ? 'stepButton' : 'stepButton stepButton_disabled';
-            rightClasses = this.state.itemIndex < this.state.items.length - 1 ? 'stepButton': 'stepButton stepButton_disabled';
-        } else {
-            leftClasses = parseInt(this.state.value) > parseInt(this.props.min) ? 'stepButton' : 'stepButton stepButton_disabled';
-            rightClasses = parseInt(this.state.value) < parseInt(this.props.max) ? 'stepButton': 'stepButton stepButton_disabled';
-        }
+        let leftClasses = this.canStepLeft() ? 'stepButton' : 'stepButton stepButton_disabled';
+        let rightClasses = this.canStepRight() ? 'stepButton': 'stepButton stepButton_disabled';
 
         return (
             <div className="stepper">
@@ -126,5 +119,13 @@ export default class Stepper extends Component {
                 </a>
             </div>
         );
+    }
+
+    canStepRight() {
+        return this.hasItems() ? this.state.itemIndex < this.state.items.length - 1 : parseInt(this.state.value) < parseInt(this.props.max);
+    }
+
+    canStepLeft() {
+        return this.hasItems() ? this.state.itemIndex > 0 : parseInt(this.state.value) > parseInt(this.props.min);
     }
 }

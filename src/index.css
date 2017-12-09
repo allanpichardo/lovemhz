@@ -108,6 +108,7 @@ a {
 .stopButton {
   background-color: var(--color-purple-bright);
 }
+
 .tempoBox {
   display:flex;
   align-items:center;
@@ -134,6 +135,10 @@ a {
   display: inline-flex;
   align-items: end;
   max-height: 30px;
+}
+
+.stepper path:hover {
+  color: var(--color-yellow-bright);
 }
 
 .stepButton {

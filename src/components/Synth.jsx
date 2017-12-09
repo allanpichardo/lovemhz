@@ -8,6 +8,7 @@ import Calculations from "../utility/Calculations";
 import EuclidSequencer from "./EuclidSequencer";
 import logo from '../images/logo.svg';
 import Tab from "./Tab";
+import ControlPanel from "./ControlPanel";
 
 export default class Synth extends Component {
 
@@ -279,7 +280,15 @@ export default class Synth extends Component {
                 </div>
                 <Tab tabClass="sequencer" title="Sequencer" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
                 <Tab tabClass="controls" title="Controls" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
-                {this.getSequencerTab()}
+                <div className="content">
+                    <ControlPanel onWaveformChanged1={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                                  onMixChanged1={(mix) => {this.handleMix1Changed(mix)}}
+                                  onOctaveChanged1={(octave) => {this.handleOctave1Changed(octave)}}
+                                  onWaveformChanged2={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                                  onMixChanged2={(mix) => {this.handleMix1Changed(mix)}}
+                                  onOctaveChanged2={(octave) => {this.handleOctave1Changed(octave)}}
+                    />
+                </div>
             </div>
         );
     }

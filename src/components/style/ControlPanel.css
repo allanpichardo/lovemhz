@@ -1,0 +1,43 @@
+.ControlPanel {
+    display: grid;
+    grid-template-areas:
+        "osc1 osc2 lpf adsr"
+        "osc1 osc2 hpf adsr";
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.osc1 {
+    grid-area: osc1;
+}
+
+.osc2 {
+    grid-area: osc2;
+}
+
+.lpf {
+    grid-area: lpf;
+}
+
+.hpf {
+    grid-area: hpf;
+}
+
+.adsr {
+    grid-area: adsr;
+}
+
+@media only screen and (max-width: 900px) {
+    .ControlPanel {
+        grid-template-areas:
+                "osc1 osc2"
+                "lpf  hpf"
+                "adsr adsr";
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        max-width: 100%;
+        min-height: 100%;
+    }
+}
