@@ -92,12 +92,12 @@ export default class EuclidRing extends Component {
     }
 
     render() {
-
+        console.log(this.props.isRunning);
         let ring = this.getRing(this.props.channel);
         let theClass = this.props.channel === '1' || this.props.channel === '3' ? 'oddRing' : 'evenRing';
         const childrenWithProps = React.Children.map(ring.props.children,
             (child) => React.cloneElement(child, {
-                className: child.props.id === `${(this.props.channel - 1)}-${this.props.step}` ? `${theClass} stepOn` : theClass
+                className: (child.props.id === `${(this.props.channel - 1)}-${this.props.step}`) && this.props.isRunning ? `${theClass} stepOn` : theClass
             })
         );
         return(

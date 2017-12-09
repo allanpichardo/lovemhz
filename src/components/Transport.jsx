@@ -11,6 +11,7 @@ export default class Transport extends Component {
         super(props);
 
         this.state = {
+            isRunning: false,
             timer: null,
             step: 0,
             bpm: 120,
@@ -18,7 +19,9 @@ export default class Transport extends Component {
         };
 
         this.handleTick = this.handleTick.bind(this);
+        this.handleStop = this.handleStop.bind(this);
         this.incrementStep = this.incrementStep.bind(this);
+        this.handleRunningChange = this.handleRunningChange.bind(this);
     }
 
     componentDidMount() {
@@ -61,6 +64,10 @@ export default class Transport extends Component {
     }
 
     handleStop() {
+        this.handleRunningChange(false);
+        this.setState({
+            isRunning: false,
+        });
         //todo: handle it!
     }
 
@@ -84,13 +91,20 @@ export default class Transport extends Component {
         }
 
         let newState = {
+            isRunning: true,
             step: this.state.step,
             steps: this.state.steps,
             bpm: this.state.bpm,
             timer : timer,
         };
         this.setState(newState);
+
+        this.handleRunningChange(true);
     };
+
+    handleRunningChange(isRunning) {
+        this.props.onRunningChanged(isRunning);
+    }
 
     static bpmToMs(bpm) {
         return 60000 / bpm / 2;

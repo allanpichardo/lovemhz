@@ -80,10 +80,10 @@ export default class Sequencer extends Component {
                          height="558.7px"
                          viewBox="0 0 558.7 558.7"
                          xmlSpace="preserve">
-                        <EuclidRing channel="1" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing channel="2" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing channel="3" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing channel="4" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="1" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="2" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="3" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="4" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
                     </svg>
                 </div>
                 <div className="divider">

@@ -15,6 +15,7 @@ export default class Synth extends Component {
         super(props);
 
         this.state = {
+            isRunning: false,
             step: 0,
             sequence: [ [],[],[],[] ],
             osc1: {
@@ -36,6 +37,7 @@ export default class Synth extends Component {
         this.resetAllVoices = this.resetAllVoices.bind(this);
         this.getVoicesFor = this.getVoicesFor.bind(this);
         this.handleTabSelected = this.handleTabSelected.bind(this);
+        this.handleTransportStateChanged = this.handleTransportStateChanged.bind(this);
     }
 
     componentDidMount() {
@@ -214,6 +216,12 @@ export default class Synth extends Component {
         element.classList.add('tab_selected');
     }
 
+    handleTransportStateChanged(isRunning) {
+        this.setState({
+            isRunning: isRunning
+        });
+    }
+
     getControlsTab() {
         return (
             <div>
@@ -257,10 +265,7 @@ export default class Synth extends Component {
     getSequencerTab() {
         return (
             <div className="content">
-            <EuclidSequencer step={this.state.step}
-                         steps="8"
-                         onNewSequence={(notes)=>{this.handleNewSequence(notes)}}
-            />
+            <EuclidSequencer step={this.state.step} steps="8" isRunning={this.state.isRunning} onNewSequence={(notes)=>{this.handleNewSequence(notes)}}/>
             </div>
         );
     }
@@ -268,7 +273,7 @@ export default class Synth extends Component {
     render() {
         return (
             <div className="wrapper">
-                <Transport/>
+                <Transport onRunningChanged={(isRunning)=>{this.handleTransportStateChanged(isRunning)}}/>
                 <div className="branding">
                     <img src={logo}/>
                 </div>

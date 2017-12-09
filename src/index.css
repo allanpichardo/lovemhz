@@ -78,6 +78,9 @@ a {
 .tab_selected {
   border-right: 5px solid var(--color-purple-bright);
 }
+.tab_selected a {
+  color: var(--color-purple-bright);
+}
 
 .content {
   grid-area: cont;
