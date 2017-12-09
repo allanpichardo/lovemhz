@@ -1,0 +1,25 @@
+.Filter {
+    display: grid;
+    grid-template-areas:
+        "ttl ttl"
+        "fre ."
+        ". pea";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50px 1fr 1fr;
+    text-align: center;
+}
+
+.ttl {
+    grid-area: ttl;
+    justify-self: center;
+}
+
+.freq {
+    grid-area: fre;
+    justify-self: center;
+}
+
+.peak {
+    grid-area: pea;
+    justify-self: center;
+}

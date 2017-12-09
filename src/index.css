@@ -67,6 +67,10 @@ a {
   color: var(--color-purple-bright);
 }
 
+.panel_title {
+  color: var(--color-purple-bright);
+}
+
 .sequencer {
   grid-area: stab;
 }

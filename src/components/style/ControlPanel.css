@@ -5,8 +5,10 @@
         "osc1 osc2 hpf adsr";
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    width: 100%;
-    height: 100%;
+    max-width: 100%;
+    height: 90%;
+    justify-items: center;
+    align-items: start;
 }
 
 .osc1 {

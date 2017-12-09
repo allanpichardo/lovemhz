@@ -1,0 +1,28 @@
+.Oscillator {
+    display: grid;
+    grid-template-areas:
+        "ttl"
+        "wav"
+        "mix"
+        "oct";
+    grid-template-rows: 50px 1fr 1fr 1fr;
+    align-items: start;
+    justify-items: center;
+    text-align: center;
+}
+
+.ttl {
+    grid-area: ttl;
+}
+
+.wav {
+    grid-area: wav;
+}
+
+.mix {
+    grid-area: mix;
+}
+
+.oct {
+    grid-area: oct;
+}
