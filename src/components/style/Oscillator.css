@@ -5,7 +5,7 @@
         "wav"
         "mix"
         "oct";
-    grid-template-rows: 50px 1fr 1fr 1fr;
+    grid-template-rows: 50px 120px 210px 100px;
     align-items: start;
     justify-items: center;
     text-align: center;

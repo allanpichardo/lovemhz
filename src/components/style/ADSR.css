@@ -1,0 +1,41 @@
+.ADSR {
+    display: grid;
+    grid-template-areas:
+        "a ."
+        ". d"
+        "s ."
+        ". r";
+    grid-template-columns: 100px 100px;
+    grid-template-rows: 140px 140px 140px 140px;
+    text-align: center;
+}
+
+.attack {
+    grid-area: a;
+    justify-self: center;
+}
+
+.decay {
+    grid-area: d;
+    justify-self: center;
+}
+
+.sustain {
+    grid-area: s;
+    justify-self: center;
+}
+
+.release {
+    grid-area: r;
+    justify-self: center;
+}
+
+@media only screen and (max-width: 900px) {
+    .ADSR {
+        grid-template-areas:
+                "a . s ."
+                ". d . r";
+        grid-template-columns: 100px 100px 100px 100px;
+        grid-template-rows: 140px 140px;
+    }
+}

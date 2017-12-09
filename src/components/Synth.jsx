@@ -30,6 +30,7 @@ export default class Synth extends Component {
                 octave: 3,
             },
             voices: [[],[]],
+            tab: 'sequencer',
         };
 
         this.handleTick = this.handleTick.bind(this);
@@ -215,6 +216,10 @@ export default class Synth extends Component {
 
     handleTabSelected(element) {
         element.classList.add('tab_selected');
+        console.log(element);
+        this.setState({
+            tab: element.classList[1]
+        });
     }
 
     handleTransportStateChanged(isRunning) {
@@ -225,40 +230,14 @@ export default class Synth extends Component {
 
     getControlsTab() {
         return (
-            <div>
-                <div className="columns">
-
-                    <div className="column is-5">
-                        <ADSR/>
-                    </div>
-                </div>
-                <div className="columns">
-                    <div className="column is-2">
-                        <Oscillator id="OSC-1"
-                                    onWaveformChanged={(waveform) => {this.handleWaveform1Changed(waveform)}}
-                                    onMixChanged={(mix) => {this.handleMix1Changed(mix)}}
-                                    onOctaveChanged={(octave) => {this.handleOctave1Changed(octave)}}
-                        />
-                    </div>
-                    <div className="column is-2">
-                        <Oscillator id="OSC-2"
-                                    onWaveformChanged={(waveform) => {this.handleWaveform2Changed(waveform)}}
-                                    onMixChanged={(mix) => {this.handleMix2Changed(mix)}}
-                                    onOctaveChanged={(octave) => {this.handleOctave2Changed(octave)}}
-                        />
-                    </div>
-                    <div className="column">
-                        <div className="columns">
-                            <div className="column">
-                                <LowpassFilter id="LPF"/>
-                            </div>
-                            <div className="column">
-                                <HighpassFilter id="HPF"/>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+            <div className="content">
+                <ControlPanel onWaveformChanged1={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                              onMixChanged1={(mix) => {this.handleMix1Changed(mix)}}
+                              onOctaveChanged1={(octave) => {this.handleOctave1Changed(octave)}}
+                              onWaveformChanged2={(waveform) => {this.handleWaveform1Changed(waveform)}}
+                              onMixChanged2={(mix) => {this.handleMix1Changed(mix)}}
+                              onOctaveChanged2={(octave) => {this.handleOctave1Changed(octave)}}
+                />
             </div>
         )
     }
@@ -272,6 +251,20 @@ export default class Synth extends Component {
     }
 
     render() {
+
+        let content;
+        switch(this.state.tab) {
+            case 'sequencer':
+                content = this.getSequencerTab();
+                break;
+            case 'controls':
+                content = this.getControlsTab();
+                break;
+            default:
+                content = this.getSequencerTab()
+                break;
+        }
+
         return (
             <div className="wrapper">
                 <Transport onRunningChanged={(isRunning)=>{this.handleTransportStateChanged(isRunning)}}/>
@@ -280,15 +273,7 @@ export default class Synth extends Component {
                 </div>
                 <Tab tabClass="sequencer" title="Sequencer" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
                 <Tab tabClass="controls" title="Controls" onTabSelected={(element)=>{this.handleTabSelected(element)}}/>
-                <div className="content">
-                    <ControlPanel onWaveformChanged1={(waveform) => {this.handleWaveform1Changed(waveform)}}
-                                  onMixChanged1={(mix) => {this.handleMix1Changed(mix)}}
-                                  onOctaveChanged1={(octave) => {this.handleOctave1Changed(octave)}}
-                                  onWaveformChanged2={(waveform) => {this.handleWaveform1Changed(waveform)}}
-                                  onMixChanged2={(mix) => {this.handleMix1Changed(mix)}}
-                                  onOctaveChanged2={(octave) => {this.handleOctave1Changed(octave)}}
-                    />
-                </div>
+                {content}
             </div>
         );
     }

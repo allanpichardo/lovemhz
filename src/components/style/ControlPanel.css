@@ -38,7 +38,7 @@
                 "lpf  hpf"
                 "adsr adsr";
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 250px 1fr;
         max-width: 100%;
         min-height: 100%;
     }

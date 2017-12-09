@@ -5,7 +5,7 @@
         "fre ."
         ". pea";
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 50px 1fr 1fr;
+    grid-template-rows: 50px 80px 50px;
     text-align: center;
 }
 

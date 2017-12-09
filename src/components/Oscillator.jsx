@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import 'jquery-knob';
 import './style/Oscillator.css';
+import Stepper from "./Stepper";
 
 export default class Oscillator extends Component {
 
@@ -44,15 +45,7 @@ export default class Oscillator extends Component {
                 </div>
                 <div className="oct">
                     <p>Octave</p>
-                    <select onChange={(e) => {this.props.onOctaveChanged(e.target.value)}}>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3" selected="selected">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                    </select>
+                    <Stepper min={0} max={6} default={3} onChange={(e) => {this.props.onOctaveChanged(e.target.value)}}/>
                 </div>
             </div>
         );
