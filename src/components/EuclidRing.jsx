@@ -92,7 +92,6 @@ export default class EuclidRing extends Component {
     }
 
     render() {
-        console.log(this.props.isRunning);
         let ring = this.getRing(this.props.channel);
         let theClass = this.props.channel === '1' || this.props.channel === '3' ? 'oddRing' : 'evenRing';
         const childrenWithProps = React.Children.map(ring.props.children,

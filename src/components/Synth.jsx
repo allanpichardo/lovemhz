@@ -261,13 +261,13 @@ export default class Synth extends Component {
                 content = this.getControlsTab();
                 break;
             default:
-                content = this.getSequencerTab()
+                content = this.getSequencerTab();
                 break;
         }
 
         return (
             <div className="wrapper">
-                <Transport onRunningChanged={(isRunning)=>{this.handleTransportStateChanged(isRunning)}}/>
+                <Transport steps={8} onTick={(step) => {this.handleTick(step)}} onRunningChanged={(isRunning)=>{this.handleTransportStateChanged(isRunning)}}/>
                 <div className="branding">
                     <img src={logo}/>
                 </div>
