@@ -8,8 +8,6 @@ export default class Stepper extends Component {
 
         this.state = this.getInitialState();
 
-        console.log(this.state);
-
         this.leftClicked = this.leftClicked.bind(this);
         this.rightClicked = this.rightClicked.bind(this);
         this.hasItems = this.hasItems.bind(this);
@@ -37,8 +35,7 @@ export default class Stepper extends Component {
         if(nextProps.default !== this.props.default) {
             this.setState({
                 value: nextProps.default,
-            })
-            this.props.onChange(nextProps.default);
+            });
         }
     }
 

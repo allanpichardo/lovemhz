@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import Oscillator from './Oscillator';
 import Transport from "./Transport";
-import ADSR from "./ADSR";
-import LowpassFilter from "./LowpassFilter";
-import HighpassFilter from "./HighpassFilter.jsx";
 import Calculations from "../utility/Calculations";
 import EuclidSequencer from "./EuclidSequencer";
 import logo from '../images/logo.svg';
