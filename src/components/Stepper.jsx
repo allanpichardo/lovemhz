@@ -6,21 +6,40 @@ export default class Stepper extends Component {
     constructor(props) {
         super(props);
 
+        this.state = this.getInitialState();
 
-        this.state = {
-            value: this.props.items ? this.props.items[0] : this.props.default,
-            itemIndex: 0,
-            items: this.props.items,
-        }
+        console.log(this.state);
 
         this.leftClicked = this.leftClicked.bind(this);
         this.rightClicked = this.rightClicked.bind(this);
         this.hasItems = this.hasItems.bind(this);
         this.canStepLeft = this.canStepLeft.bind(this);
         this.canStepRight = this.canStepRight.bind(this);
+        this.getInitialState = this.getInitialState.bind(this);
     }
 
-    componentDidMount() {
+    getInitialState() {
+        let value = this.props.default;
+        let itemIndex = 0;
+
+        if(!!this.props.items) {
+            itemIndex = this.props.items.indexOf(value);
+        }
+
+        return {
+            value: value,
+            itemIndex: itemIndex,
+            items: this.props.items,
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.default !== this.props.default) {
+            this.setState({
+                value: nextProps.default,
+            })
+            this.props.onChange(nextProps.default);
+        }
     }
 
     hasItems() {
@@ -28,55 +47,75 @@ export default class Stepper extends Component {
     }
 
     leftClicked(e) {
-        e.preventDefault();
+        if(e) {
+            e.preventDefault();
+        }
 
         if(this.hasItems()) {
             if(this.canStepLeft()) {
                 let idx = (this.state.itemIndex - 1);
                 let val = this.state.items[idx];
                 this.input.value = val;
-                this.props.onChange(val);
+
                 this.setState({
                     itemIndex: idx,
                     value: val,
                 });
+
+                if(e) {
+                    this.props.onChange(val);
+                }
             }
         } else {
             if(this.canStepLeft()) {
                 let val = parseInt(this.state.value);
                 val = val - 1;
                 this.input.value = val;
-                this.props.onChange(val);
+
                 this.setState({
                     value: val,
                 });
+
+                if(e) {
+                    this.props.onChange(val);
+                }
             }
         }
     }
 
     rightClicked(e) {
-        e.preventDefault();
+        if(e) {
+            e.preventDefault();
+        }
 
         if(this.hasItems()) {
             if(this.canStepRight()) {
                 let idx = this.state.itemIndex + 1;
                 let val = this.state.items[idx];
                 this.input.value = val;
-                this.props.onChange(val);
+
                 this.setState({
                     itemIndex: idx,
                     value: val,
                 });
+
+                if(e) {
+                    this.props.onChange(val);
+                }
             }
         } else {
             if(this.canStepRight()) {
                 let val = parseInt(this.state.value);
                 val = val + 1;
                 this.input.value = val;
-                this.props.onChange(val);
+
                 this.setState({
                     value: val,
                 });
+
+                if(e) {
+                    this.props.onChange(val);
+                }
             }
         }
     }
@@ -102,7 +141,7 @@ export default class Stepper extends Component {
                         </g>
                     </svg>
                 </a>
-                <input className="stepInput" defaultValue={this.state.value} ref={(input) => this.input = input} readOnly/>
+                <input className="stepInput" value={this.state.value} ref={(input) => this.input = input} readOnly/>
                 <a href="#" onClick={(e) => {this.rightClicked(e)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.38 33.62">
                         <g>
