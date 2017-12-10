@@ -3,6 +3,7 @@ import './style/EuclidSequencer.css';
 import 'jquery-knob';
 import EuclidRing from "./EuclidRing";
 import Stepper from "./Stepper";
+import Euclid from 'euclidean-rhythms';
 
 export default class Sequencer extends Component {
 
@@ -16,7 +17,8 @@ export default class Sequencer extends Component {
         this.handleOffsetChange = this.handleOffsetChange.bind(this);
 
         this.state = {
-            notes: this.initNoteMatrix()
+            notes: this.initNoteMatrix(),
+            tonesForTrack: ['C', 'C', 'C', 'C']
         };
     }
 
@@ -28,9 +30,6 @@ export default class Sequencer extends Component {
             }
         }
         return notes;
-    }
-
-    componentDidMount() {
     }
 
     handleNoteSelected(id, note) {
@@ -49,15 +48,41 @@ export default class Sequencer extends Component {
     }
 
     handleStepClicked(e) {
-        console.log(e);
+        //todo: handle this
     }
 
     handleNoteChange(track, note) {
-        //todo: acknowledge note change for this track
+        let tones = this.state.tonesForTrack.slice();
+        tones[track] = note;
+
+        let sequence = this.state.notes.slice();
+        sequence[track].forEach((oldNote, i) => {
+            if(oldNote) {
+                sequence[track][i] = note;
+            }
+        });
+
+        this.setState({
+            tonesForTrack: tones,
+            notes: sequence
+        });
     }
 
     handleOnsetChange(track, onsets) {
+        //compute a new set of onsets
+        let euclid = Euclid.getPattern(onsets, this.props.steps);
+        let currentNotes = this.state.notes.slice();
+        let note = this.state.tonesForTrack[track];
 
+        euclid.forEach((step, i) => {
+            currentNotes[track][i] = step === 1 ? note : null;
+        });
+
+        this.setState({
+            notes: currentNotes
+        });
+
+        this.props.onNewSequence(currentNotes);
     }
 
     handleOffsetChange(track, offset) {
@@ -80,10 +105,10 @@ export default class Sequencer extends Component {
                          height="558.7px"
                          viewBox="0 0 558.7 558.7"
                          xmlSpace="preserve">
-                        <EuclidRing isRunning={this.props.isRunning} channel="1" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing isRunning={this.props.isRunning} channel="2" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing isRunning={this.props.isRunning} channel="3" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
-                        <EuclidRing isRunning={this.props.isRunning} channel="4" step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="1" onsets={this.state.notes[0]} step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="2" onsets={this.state.notes[1]} step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="3" onsets={this.state.notes[2]} step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
+                        <EuclidRing isRunning={this.props.isRunning} channel="4" onsets={this.state.notes[3]} step={this.props.step} onStepClicked={(e) => {this.handleStepClicked(e)}}/>
                     </svg>
                 </div>
                 <div className="divider">

@@ -13,9 +13,6 @@ export default class EuclidRing extends Component {
         this.getRing = this.getRing.bind(this);
     }
 
-    componentDidMount() {
-    }
-
     getRing(channel) {
         switch(channel) {
             case '1':
@@ -94,15 +91,31 @@ export default class EuclidRing extends Component {
     render() {
         let ring = this.getRing(this.props.channel);
         let theClass = this.props.channel === '1' || this.props.channel === '3' ? 'oddRing' : 'evenRing';
+
         const childrenWithProps = React.Children.map(ring.props.children,
             (child) => React.cloneElement(child, {
                 className: (child.props.id === `${(this.props.channel - 1)}-${this.props.step}`) && this.props.isRunning ? `${theClass} stepOn` : theClass
             })
         );
+
         return(
             <g>
                 {childrenWithProps}
             </g>
         );
     }
+
+    componentDidUpdate() {
+        this.props.onsets.forEach((onset, i) => {
+            let id = `${(this.props.channel - 1)}-${i}`;
+            let step = document.getElementById(id);
+
+            if(onset) {
+                step.classList.add('stepActive');
+            } else {
+                step.classList.remove('stepActive');
+            }
+        });
+    }
+
 }

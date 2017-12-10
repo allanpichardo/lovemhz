@@ -87,8 +87,9 @@ export default class Synth extends Component {
             voice2.type = this.state.osc2.waveform;
             voice2.connect(this.oscGain2);
 
-            voice1.frequency.value = Calculations.shiftToOctave(notes, this.state.osc1.octave);
-            voice2.frequency.value = Calculations.shiftToOctave(notes, this.state.osc2.octave);
+            let noteFreq = Calculations.textNoteToFrequency(notes);
+            voice1.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc1.octave);
+            voice2.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc2.octave);
 
             return [voice1, voice2];
         }
@@ -216,7 +217,6 @@ export default class Synth extends Component {
 
     handleTabSelected(element) {
         element.classList.add('tab_selected');
-        console.log(element);
         this.setState({
             tab: element.classList[1]
         });
