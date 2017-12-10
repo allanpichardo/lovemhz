@@ -26,3 +26,9 @@
 .oct {
     grid-area: oct;
 }
+
+.wav input {
+    font-size: 2.5rem;
+    padding-bottom: 10px;
+    letter-spacing: -2px;
+}

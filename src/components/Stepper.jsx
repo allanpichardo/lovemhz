@@ -36,6 +36,13 @@ export default class Stepper extends Component {
             this.setState({
                 value: nextProps.default,
             });
+
+            if(this.hasItems()) {
+                let newIndex = this.props.items.indexOf(nextProps.default);
+                this.setState({
+                    itemIndex: newIndex,
+                })
+            }
         }
     }
 
