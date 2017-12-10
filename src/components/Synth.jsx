@@ -11,6 +11,8 @@ export default class Synth extends Component {
     constructor(props) {
         super(props);
 
+        this.voices = [[],[]];
+
         this.state = {
             isRunning: false,
             step: 0,
@@ -25,12 +27,10 @@ export default class Synth extends Component {
                 waveform: 'sine',
                 octave: 3,
             },
-            voices: [[],[]],
             tab: 'sequencer',
         };
 
         this.handleTick = this.handleTick.bind(this);
-        this.getStateCopy = this.getStateCopy.bind(this);
         this.playStep = this.playStep.bind(this);
         this.resetAllVoices = this.resetAllVoices.bind(this);
         this.getVoicesFor = this.getVoicesFor.bind(this);
@@ -51,25 +51,21 @@ export default class Synth extends Component {
         this.oscGain1.connect(this.audioContext.destination);
         this.oscGain2.connect(this.audioContext.destination);
 
-        this.handleTabSelected(document.querySelector('.sequencer'));
+        let savedState = JSON.parse(sessionStorage.getItem('Synth'));
+        if(savedState) {
+            this.setState(savedState);
+        }
+
+        this.handleTabSelected(document.querySelector(`.${savedState.tab}`));
     }
 
-    getStateCopy() {
-        return {
-            step: this.state.step,
-            sequence: this.state.sequence,
-            osc1: {
-                mix: this.state.osc1.mix,
-                waveform: this.state.osc1.waveform,
-                octave: this.state.osc1.octave,
-            },
-            osc2: {
-                mix: this.state.osc2.mix,
-                waveform: this.state.osc2.waveform,
-                octave: this.state.osc2.octave,
-            },
-            voices: this.state.voices,
-        };
+    componentWillUnmount() {
+        this.saveState(this.state);
+    }
+
+    saveState(state) {
+        let stateJson = JSON.stringify(state);
+        sessionStorage.setItem('Synth', stateJson);
     }
 
     getVoicesFor(channel) {
@@ -100,50 +96,47 @@ export default class Synth extends Component {
             let channel3 = this.getVoicesFor(3);
             let channel4 = this.getVoicesFor(4);
 
-            let newState = this.getStateCopy();
-
             if(channel1) {
                 channel1[0].start();
                 channel1[1].start();
 
-                newState.voices[0][1] = channel1[0];
-                newState.voices[1][1] = channel1[1];
+                this.voices[0][1] = channel1[0];
+                this.voices[1][1] = channel1[1];
             }
             if(channel2) {
                 channel2[0].start();
                 channel2[1].start();
 
-                newState.voices[0][2] = channel2[0];
-                newState.voices[1][2] = channel2[1];
+                this.voices[0][2] = channel2[0];
+                this.voices[1][2] = channel2[1];
             }
             if(channel3) {
                 channel3[0].start();
                 channel3[1].start();
 
-                newState.voices[0][3] = channel3[0];
-                newState.voices[1][3] = channel3[1];
+                this.voices[0][3] = channel3[0];
+                this.voices[1][3] = channel3[1];
             }
             if(channel4) {
                 channel4[0].start();
                 channel4[1].start();
 
-                newState.voices[0][4] = channel4[0];
-                newState.voices[1][4] = channel4[1];
+                this.voices[0][4] = channel4[0];
+                this.voices[1][4] = channel4[1];
             }
 
-            this.setState(newState);
         }catch (e) {
             console.log(e);
         }
     }
 
     resetAllVoices() {
-        this.state.voices.forEach((osc, o) => {
+        this.voices.forEach((osc, o) => {
             osc.forEach((voice, v) => {
                 if(voice) {
                     try {
-                        this.state.voices[o][v].stop();
-                        this.state.voices[o][v] = null;
+                        this.voices[o][v].stop();
+                        this.voices[o][v] = null;
                     } catch (e) {
                         //ignore
                     }
@@ -153,13 +146,13 @@ export default class Synth extends Component {
     }
 
     handleNewSequence(notes) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.sequence = notes;
         this.setState(newState);
     }
 
     handleTick(step) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.step = step;
         this.setState(newState);
 
@@ -168,13 +161,13 @@ export default class Synth extends Component {
     }
 
     handleWaveform1Changed(waveform) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc1.waveform = waveform;
         this.setState(newState);
     }
 
     handleMix1Changed(mix) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc1.mix = mix;
         this.setState(newState);
 
@@ -182,19 +175,19 @@ export default class Synth extends Component {
     }
 
     handleOctave1Changed(octave) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc1.octave = octave;
         this.setState(newState);
     }
 
     handleWaveform2Changed(waveform) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc2.waveform = waveform;
         this.setState(newState);
     }
 
     handleMix2Changed(mix) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc2.mix = mix;
         this.setState(newState);
 
@@ -202,7 +195,7 @@ export default class Synth extends Component {
     }
 
     handleOctave2Changed(octave) {
-        let newState = this.getStateCopy();
+        let newState = Object.assign({}, this.state);
         newState.osc1.octave = octave;
         this.setState(newState);
     }
@@ -214,9 +207,11 @@ export default class Synth extends Component {
     handleTabSelected(element) {
         element.classList.add('tab_selected');
 
-        this.setState({
-            tab: element.classList[1],
-        });
+        let newState = Object.assign({}, this.state);
+        newState.tab = element.classList[1];
+        this.setState(newState);
+
+        this.saveState(newState);
     }
 
     handleTransportStateChanged(isRunning) {

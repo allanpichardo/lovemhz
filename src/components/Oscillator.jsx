@@ -20,6 +20,16 @@ export default class Oscillator extends Component {
                 this.props.onMixChanged(v / 100);
             }
         });
+
+        let savedState = JSON.parse(sessionStorage.getItem(this.props.id));
+        if(savedState) {
+            this.setState(savedState);
+        }
+    }
+
+    componentWillUnmount() {
+        let state = JSON.stringify(this.state);
+        sessionStorage.setItem(this.props.id, state);
     }
 
     render() {
@@ -45,7 +55,7 @@ export default class Oscillator extends Component {
                 </div>
                 <div className="oct">
                     <p>Octave</p>
-                    <Stepper min={0} max={6} default={3} onChange={(e) => {this.props.onOctaveChanged(e.target.value)}}/>
+                    <Stepper min={0} max={6} default={3} onChange={(val) => {this.props.onOctaveChanged(val)}}/>
                 </div>
             </div>
         );
