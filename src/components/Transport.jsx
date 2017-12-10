@@ -39,16 +39,13 @@ export default class Transport extends Component {
     }
 
     handleTempoChange(bpm) {
-        let newState = {
-            timer: this.state.timer,
-            step: this.state.step,
+
+        this.setState({
             bpm: bpm,
-            steps: this.state.steps
-        };
-        this.setState(newState);
+        });
 
         let timer = this.state.timer;
-        let sequenceTime = Transport.bpmToMs(this.state.bpm);
+        let sequenceTime = Transport.bpmToMs(bpm);
 
         if(timer) {
             timer.interval = sequenceTime;
@@ -67,8 +64,8 @@ export default class Transport extends Component {
         this.handleRunningChange(false);
         this.setState({
             isRunning: false,
+            step: 0,
         });
-        //todo: handle it!
     }
 
     handleTransportToggle = (isStarted) => {

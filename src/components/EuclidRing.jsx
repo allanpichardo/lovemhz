@@ -105,17 +105,25 @@ export default class EuclidRing extends Component {
         );
     }
 
+    componentDidMount() {
+        this.highlightSelectedSteps();
+    }
+
+
     componentDidUpdate() {
+        this.highlightSelectedSteps();
+    }
+
+    highlightSelectedSteps() {
         this.props.onsets.forEach((onset, i) => {
             let id = `${(this.props.channel - 1)}-${i}`;
             let step = document.getElementById(id);
 
-            if(onset) {
+            if (onset) {
                 step.classList.add('stepActive');
             } else {
                 step.classList.remove('stepActive');
             }
         });
     }
-
 }

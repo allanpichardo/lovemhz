@@ -17,7 +17,7 @@ export default class Sequencer extends Component {
         this.handleOffsetChange = this.handleOffsetChange.bind(this);
 
         this.state = {
-            notes: this.initNoteMatrix(),
+            notes: this.props.initialSequence ? this.props.initialSequence : this.initNoteMatrix(),
             tonesForTrack: ['C', 'C', 'C', 'C']
         };
     }
@@ -69,7 +69,6 @@ export default class Sequencer extends Component {
     }
 
     handleOnsetChange(track, onsets) {
-        //compute a new set of onsets
         let euclid = Euclid.getPattern(onsets, this.props.steps);
         let currentNotes = this.state.notes.slice();
         let note = this.state.tonesForTrack[track];
@@ -91,7 +90,7 @@ export default class Sequencer extends Component {
 
     render() {
 
-        let noteValues = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'B#'];
+        let noteValues = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
         return (
             <div className="Euclid">
@@ -119,22 +118,22 @@ export default class Sequencer extends Component {
 
                     <div className="track">1</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(0, val)}}/>
-                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(0, val)}}/>
+                    <Stepper default={this.state.notes[0].filter(Boolean).length} min={0} max={8} onChange={(val) => {this.handleOnsetChange(0, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(0, val)}}/>
 
                     <div className="track">2</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(1, val)}}/>
-                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(1, val)}}/>
+                    <Stepper default={this.state.notes[1].filter(Boolean).length} min={0} max={8} onChange={(val) => {this.handleOnsetChange(1, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(1, val)}}/>
 
                     <div className="track">3</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(2, val)}}/>
-                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(2, val)}}/>
+                    <Stepper default={this.state.notes[2].filter(Boolean).length} min={0} max={8} onChange={(val) => {this.handleOnsetChange(2, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(2, val)}}/>
 
                     <div className="track">4</div>
                     <Stepper items={noteValues} onChange={(val)=>{this.handleNoteChange(3, val)}}/>
-                    <Stepper default={0} min={0} max={8} onChange={(val) => {this.handleOnsetChange(3, val)}}/>
+                    <Stepper default={this.state.notes[3].filter(Boolean).length} min={0} max={8} onChange={(val) => {this.handleOnsetChange(3, val)}}/>
                     <Stepper default={0} min={0} max={7} onChange={(val) => {this.handleOffsetChange(3, val)}}/>
                 </div>
             </div>
