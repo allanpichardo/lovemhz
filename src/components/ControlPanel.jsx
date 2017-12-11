@@ -16,6 +16,7 @@ export default class ControlPanel extends Component {
             <div className="ControlPanel">
                 <div className="osc1">
                     <Oscillator id="OSC-1"
+                                defaultWav="∿" defaultMix={25} defaultOctave={2}
                                 onWaveformChanged={(waveform) => {this.props.onWaveformChanged1(waveform)}}
                                 onMixChanged={(mix) => {this.props.onMixChanged1(mix)}}
                                 onOctaveChanged={(octave) => {this.props.onOctaveChanged1(octave)}}
@@ -23,6 +24,7 @@ export default class ControlPanel extends Component {
                 </div>
                 <div className="osc2">
                     <Oscillator id="OSC-2"
+                                defaultWav="⊿" defaultMix={25} defaultOctave={4}
                                 onWaveformChanged={(waveform) => {this.props.onWaveformChanged2(waveform)}}
                                 onMixChanged={(mix) => {this.props.onMixChanged2(mix)}}
                                 onOctaveChanged={(octave) => {this.props.onOctaveChanged2(octave)}}
