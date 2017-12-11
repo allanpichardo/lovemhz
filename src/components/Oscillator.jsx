@@ -65,7 +65,7 @@ export default class Oscillator extends Component {
                 <div className="mix">
                     <p>Mix</p>
                     <input type="text" value={this.state.mix} id={this.state.knobId} className="knob" data-width="70"
-                           data-height="70" data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="true" data-max="50" data-angleOffset="180"
+                           data-height="70" data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="true" data-max="25" data-angleOffset="180"
                     />
                 </div>
                 <div className="oct">

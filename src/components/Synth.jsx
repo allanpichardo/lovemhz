@@ -5,14 +5,12 @@ import EuclidSequencer from "./EuclidSequencer";
 import logo from '../images/logo.svg';
 import Tab from "./Tab";
 import ControlPanel from "./ControlPanel";
-import $ from 'jquery';
+import ADSREnvelope from 'adsr-envelope';
 
 export default class Synth extends Component {
 
     constructor(props) {
         super(props);
-
-        this.voices = [[],[]];
 
         this.state = {
             isRunning: false,
@@ -39,6 +37,15 @@ export default class Synth extends Component {
                 freq: 0,
                 peak: 1
             },
+            adsr: {
+                attackTime: 0.1,
+                decayTime: 0.25,
+                sustainLevel: 0.2,
+                releaseTime: 0,
+                gateTime: .6,
+                peakLevel: 0.25,
+                releaseCurve: "exp",
+            },
             tab: 'sequencer',
         };
 
@@ -51,6 +58,7 @@ export default class Synth extends Component {
         this.initializeAudio = this.initializeAudio.bind(this);
         this.handleFreqChangedH = this.handleFreqChangedH.bind(this);
         this.handlePeakChangedH = this.handlePeakChangedH.bind(this);
+        this.makeNote = this.makeNote.bind(this);
     }
 
     componentDidMount() {
@@ -61,6 +69,7 @@ export default class Synth extends Component {
             this.setState(savedState);
 
             this.handleTabSelected(document.querySelector(`.${savedState.tab}`));
+
         }
 
     }
@@ -85,6 +94,8 @@ export default class Synth extends Component {
         this.lpf2 = this.audioContext.createBiquadFilter();
         this.lpf2.type = this.state.lpf.type;
 
+        this.adsr = new ADSREnvelope(this.state.adsr);
+
         this.hpf1.frequency.value = this.state.hpf.freq;
         this.hpf1.Q.value = this.state.hpf.peak;
         this.hpf2.frequency.value = this.state.hpf.freq;
@@ -97,10 +108,6 @@ export default class Synth extends Component {
 
         this.oscGain1.gain.value = this.state.osc1.mix;
         this.oscGain2.gain.value = this.state.osc2.mix;
-
-        // this.hpf.connect(this.lpf);
-        // this.lpf.connect(this.oscGain1);
-        // this.lpf.connect(this.oscGain2);
 
         this.oscGain1.connect(this.audioContext.destination);
         this.oscGain2.connect(this.audioContext.destination);
@@ -145,6 +152,35 @@ export default class Synth extends Component {
         return null;
     }
 
+    makeNote(voices) {
+        if(voices) {
+
+            let envelope11 = this.adsr.clone();
+            let envelope12 = this.adsr.clone();
+
+            envelope11.peakLevel = this.state.osc1.mix;
+            envelope11.gateTime = Transport.bpmToS(this.state.bpm);
+
+            envelope12.peakLevel = this.state.osc2.mix;
+            envelope12.gateTime = Transport.bpmToS(this.state.bpm);
+
+            envelope11.applyTo(this.oscGain1.gain, this.audioContext.currentTime);
+            envelope12.applyTo(this.oscGain2.gain, this.audioContext.currentTime);
+
+            voices[0].start(this.audioContext.currentTime);
+            voices[1].start(this.audioContext.currentTime);
+
+            this.oscGain1.gain.cancelScheduledValues(this.audioContext.currentTime);
+            this.oscGain2.gain.cancelScheduledValues(this.audioContext.currentTime);
+
+            envelope11.applyTo(this.oscGain1.gain, this.audioContext.currentTime);
+            envelope12.applyTo(this.oscGain2.gain, this.audioContext.currentTime);
+
+            voices[0].stop(this.audioContext.currentTime + envelope11.duration);
+            voices[1].stop(this.audioContext.currentTime + envelope12.duration);
+        }
+    }
+
     playStep() {
         try {
             let channel1 = this.getVoicesFor(1);
@@ -152,30 +188,29 @@ export default class Synth extends Component {
             let channel3 = this.getVoicesFor(3);
             let channel4 = this.getVoicesFor(4);
 
-            if(channel1) {
-                channel1[0].start(this.audioContext.currentTime);
-                channel1[1].start(this.audioContext.currentTime);
-                channel1[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-                channel1[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-            }
-            if(channel2) {
-                channel2[0].start(this.audioContext.currentTime);
-                channel2[1].start(this.audioContext.currentTime);
-                channel2[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-                channel2[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-            }
-            if(channel3) {
-                channel3[0].start(this.audioContext.currentTime);
-                channel3[1].start(this.audioContext.currentTime);
-                channel3[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-                channel3[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-            }
-            if(channel4) {
-                channel4[0].start(this.audioContext.currentTime);
-                channel4[1].start(this.audioContext.currentTime);
-                channel4[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-                channel4[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
-            }
+            this.makeNote(channel1);
+            this.makeNote(channel2);
+            this.makeNote(channel3);
+            this.makeNote(channel4);
+
+            // if(channel2) {
+            //     channel2[0].start(this.audioContext.currentTime);
+            //     channel2[1].start(this.audioContext.currentTime);
+            //     channel2[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            //     channel2[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            // }
+            // if(channel3) {
+            //     channel3[0].start(this.audioContext.currentTime);
+            //     channel3[1].start(this.audioContext.currentTime);
+            //     channel3[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            //     channel3[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            // }
+            // if(channel4) {
+            //     channel4[0].start(this.audioContext.currentTime);
+            //     channel4[1].start(this.audioContext.currentTime);
+            //     channel4[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            //     channel4[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
+            // }
 
         }catch (e) {
             console.log(e);
