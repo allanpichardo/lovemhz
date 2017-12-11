@@ -123,15 +123,17 @@ export default class Synth extends Component {
             voice1.type = this.state.osc1.waveform;
 
             voice1.connect(this.hpf1);
-            this.hpf1.connect(this.lpf1);
+            voice1.connect(this.lpf2);
             this.lpf1.connect(this.oscGain1);
+            this.hpf1.connect(this.oscGain1);
 
             let voice2 = this.audioContext.createOscillator();
 
             voice2.type = this.state.osc2.waveform;
             voice2.connect(this.hpf2);
-            this.hpf2.connect(this.lpf2);
+            voice2.connect(this.lpf2);
             this.lpf2.connect(this.oscGain2);
+            this.hpf2.connect(this.oscGain2);
 
             let noteFreq = Calculations.textNoteToFrequency(notes);
             voice1.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc1.octave);
@@ -276,6 +278,28 @@ export default class Synth extends Component {
         }
     }
 
+    handleFreqChangedL(freq, shouldSave) {
+        this.lpf1.frequency.value = freq;
+        this.lpf2.frequency.value = freq;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.lpf.freq = freq;
+            this.setState(newState);
+        }
+    }
+
+    handlePeakChangedL(peak, shouldSave) {
+        this.lpf1.Q.value = peak;
+        this.lpf2.Q.value = peak;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.lpf.peak = peak;
+            this.setState(newState);
+        }
+    }
+
     handlePaused() {
         this.resetAllVoices();
     }
@@ -314,6 +338,8 @@ export default class Synth extends Component {
                               onOctaveChanged2={(octave) => {this.handleOctave2Changed(octave)}}
                               onFreqChangedH={(freq, shouldSave) => this.handleFreqChangedH(freq, shouldSave)}
                               onPeakChangedH={(peak, shouldSave) => this.handlePeakChangedH(peak, shouldSave)}
+                              onFreqChangedL={(freq, shouldSave) => this.handleFreqChangedL(freq, shouldSave)}
+                              onPeakChangedL={(peak, shouldSave) => this.handlePeakChangedL(peak, shouldSave)}
                 />
             </div>
         )
