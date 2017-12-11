@@ -111,6 +111,10 @@ export default class Transport extends Component {
         return 60000 / ms;
     }
 
+    static bpmToS(bpm) {
+        return Transport.bpmToMs(bpm) / 1000;
+    }
+
 
     handleTick() {
         if(this.props.onTick) {

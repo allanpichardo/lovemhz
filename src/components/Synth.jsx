@@ -17,6 +17,7 @@ export default class Synth extends Component {
         this.state = {
             isRunning: false,
             step: 0,
+            bpm: 120,
             sequence: [ [],[],[],[] ],
             osc1: {
                 mix: 0.25,
@@ -44,7 +45,6 @@ export default class Synth extends Component {
         this.handleTick = this.handleTick.bind(this);
         this.playStep = this.playStep.bind(this);
         this.saveState = this.saveState.bind(this);
-        this.resetAllVoices = this.resetAllVoices.bind(this);
         this.getVoicesFor = this.getVoicesFor.bind(this);
         this.handleTabSelected = this.handleTabSelected.bind(this);
         this.handleTransportStateChanged = this.handleTransportStateChanged.bind(this);
@@ -153,52 +153,33 @@ export default class Synth extends Component {
             let channel4 = this.getVoicesFor(4);
 
             if(channel1) {
-                channel1[0].start();
-                channel1[1].start();
-
-                this.voices[0][1] = channel1[0];
-                this.voices[1][1] = channel1[1];
+                channel1[0].start(this.audioContext.currentTime);
+                channel1[1].start(this.audioContext.currentTime);
+                channel1[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
+                channel1[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
             }
             if(channel2) {
-                channel2[0].start();
-                channel2[1].start();
-
-                this.voices[0][2] = channel2[0];
-                this.voices[1][2] = channel2[1];
+                channel2[0].start(this.audioContext.currentTime);
+                channel2[1].start(this.audioContext.currentTime);
+                channel2[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
+                channel2[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
             }
             if(channel3) {
-                channel3[0].start();
-                channel3[1].start();
-
-                this.voices[0][3] = channel3[0];
-                this.voices[1][3] = channel3[1];
+                channel3[0].start(this.audioContext.currentTime);
+                channel3[1].start(this.audioContext.currentTime);
+                channel3[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
+                channel3[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
             }
             if(channel4) {
-                channel4[0].start();
-                channel4[1].start();
-
-                this.voices[0][4] = channel4[0];
-                this.voices[1][4] = channel4[1];
+                channel4[0].start(this.audioContext.currentTime);
+                channel4[1].start(this.audioContext.currentTime);
+                channel4[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
+                channel4[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm));
             }
 
         }catch (e) {
             console.log(e);
         }
-    }
-
-    resetAllVoices() {
-        this.voices.forEach((osc, o) => {
-            osc.forEach((voice, v) => {
-                if(voice) {
-                    try {
-                        this.voices[o][v].stop();
-                        this.voices[o][v] = null;
-                    } catch (e) {
-                        //ignore
-                    }
-                }
-            });
-        });
     }
 
     handleNewSequence(notes) {
@@ -212,7 +193,6 @@ export default class Synth extends Component {
         newState.step = step;
         this.setState(newState);
 
-        this.resetAllVoices();
         this.playStep()
     }
 
@@ -301,7 +281,7 @@ export default class Synth extends Component {
     }
 
     handlePaused() {
-        this.resetAllVoices();
+        //todo: something when paused
     }
 
     handleTabSelected(element) {
@@ -316,7 +296,6 @@ export default class Synth extends Component {
 
     handleTransportStateChanged(isRunning) {
         if(!isRunning) {
-            this.resetAllVoices();
             this.setState({
                 step: 0,
             });
