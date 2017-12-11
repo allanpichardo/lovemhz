@@ -9,6 +9,7 @@ export default class ControlPanel extends Component {
 
     constructor(props) {
         super(props);
+
     }
 
     render(){
@@ -34,7 +35,7 @@ export default class ControlPanel extends Component {
                     <LowpassFilter id="LPF"/>
                 </div>
                 <div className="hpf">
-                    <HighpassFilter id="HPF"/>
+                    <HighpassFilter id="HPF" onFreqChanged={(freq) => this.props.onFreqChangedH(freq)} onPeakChanged={(peak) => this.props.onPeakChangedH(peak)}/>
                 </div>
                 <div className="adsr">
                     <ADSR id="ADSR"/>

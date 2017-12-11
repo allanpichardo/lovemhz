@@ -28,16 +28,29 @@ export default class Synth extends Component {
                 waveform: 'triangle',
                 octave: 4,
             },
+            lpf: {
+                type: 'lowpass',
+                freq: 22050,
+                peak: 1
+            },
+            hpf: {
+                type: 'highpass',
+                freq: 0,
+                peak: 1
+            },
             tab: 'sequencer',
         };
 
         this.handleTick = this.handleTick.bind(this);
         this.playStep = this.playStep.bind(this);
+        this.saveState = this.saveState.bind(this);
         this.resetAllVoices = this.resetAllVoices.bind(this);
         this.getVoicesFor = this.getVoicesFor.bind(this);
         this.handleTabSelected = this.handleTabSelected.bind(this);
         this.handleTransportStateChanged = this.handleTransportStateChanged.bind(this);
         this.initializeAudio = this.initializeAudio.bind(this);
+        this.handleFreqChangedH = this.handleFreqChangedH.bind(this);
+        this.handlePeakChangedH = this.handlePeakChangedH.bind(this);
     }
 
     componentDidMount() {
@@ -62,15 +75,35 @@ export default class Synth extends Component {
         this.oscGain1 = this.audioContext.createGain();
         this.oscGain2 = this.audioContext.createGain();
 
-        // this.merger = this.audioContext.createChannelMerger(2);
+        this.hpf1 = this.audioContext.createBiquadFilter();
+        this.hpf1.type = this.state.hpf.type;
+        this.hpf2 = this.audioContext.createBiquadFilter();
+        this.hpf2.type = this.state.hpf.type;
 
-        // this.oscGain1.connect(this.merger, 0, 0);
-        // this.oscGain2.connect(this.merger, 0, 1);
+        this.lpf1 = this.audioContext.createBiquadFilter();
+        this.lpf1.type = this.state.lpf.type;
+        this.lpf2 = this.audioContext.createBiquadFilter();
+        this.lpf2.type = this.state.lpf.type;
+
+        this.hpf1.frequency.value = this.state.hpf.freq;
+        this.hpf1.Q.value = this.state.hpf.peak;
+        this.hpf2.frequency.value = this.state.hpf.freq;
+        this.hpf2.Q.value = this.state.hpf.peak;
+
+        this.lpf1.frequency.value = this.state.lpf.freq;
+        this.lpf1.Q.value = this.state.lpf.peak;
+        this.lpf2.frequency.value = this.state.lpf.freq;
+        this.lpf2.Q.value = this.state.lpf.peak;
+
+        this.oscGain1.gain.value = this.state.osc1.mix;
+        this.oscGain2.gain.value = this.state.osc2.mix;
+
+        // this.hpf.connect(this.lpf);
+        // this.lpf.connect(this.oscGain1);
+        // this.lpf.connect(this.oscGain2);
 
         this.oscGain1.connect(this.audioContext.destination);
         this.oscGain2.connect(this.audioContext.destination);
-
-        // this.merger.connect(this.audioContext.destination);
     }
 
     componentWillUnmount() {
@@ -85,15 +118,20 @@ export default class Synth extends Component {
     getVoicesFor(channel) {
         let notes = this.state.sequence[channel - 1][this.state.step];
         if(notes) {
+
             let voice1 = this.audioContext.createOscillator();
             voice1.type = this.state.osc1.waveform;
-            this.oscGain1.gain.value = this.state.osc1.mix;
-            voice1.connect(this.oscGain1);
+
+            voice1.connect(this.hpf1);
+            this.hpf1.connect(this.lpf1);
+            this.lpf1.connect(this.oscGain1);
 
             let voice2 = this.audioContext.createOscillator();
-            this.oscGain2.gain.value = this.state.osc2.mix;
+
             voice2.type = this.state.osc2.waveform;
-            voice2.connect(this.oscGain2);
+            voice2.connect(this.hpf2);
+            this.hpf2.connect(this.lpf2);
+            this.lpf2.connect(this.oscGain2);
 
             let noteFreq = Calculations.textNoteToFrequency(notes);
             voice1.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc1.octave);
@@ -216,6 +254,28 @@ export default class Synth extends Component {
         this.setState(newState);
     }
 
+    handleFreqChangedH(freq, shouldSave) {
+        this.hpf1.frequency.value = freq;
+        this.hpf2.frequency.value = freq;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.hpf.freq = freq;
+            this.setState(newState);
+        }
+    }
+
+    handlePeakChangedH(peak, shouldSave) {
+        this.hpf1.Q.value = peak;
+        this.hpf2.Q.value = peak;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.hpf.peak = peak;
+            this.setState(newState);
+        }
+    }
+
     handlePaused() {
         this.resetAllVoices();
     }
@@ -252,6 +312,8 @@ export default class Synth extends Component {
                               onWaveformChanged2={(waveform) => {this.handleWaveform2Changed(waveform)}}
                               onMixChanged2={(mix) => {this.handleMix2Changed(mix)}}
                               onOctaveChanged2={(octave) => {this.handleOctave2Changed(octave)}}
+                              onFreqChangedH={(freq, shouldSave) => this.handleFreqChangedH(freq, shouldSave)}
+                              onPeakChangedH={(peak, shouldSave) => this.handlePeakChangedH(peak, shouldSave)}
                 />
             </div>
         )

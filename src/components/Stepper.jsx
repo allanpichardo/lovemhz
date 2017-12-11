@@ -146,7 +146,7 @@ export default class Stepper extends Component {
                     </svg>
                 </a>
                 <input className="stepInput" value={this.state.value} ref={(input) => this.input = input} readOnly/>
-                <a href="#" onClick={(e) => {this.rightClicked(e)}}>
+                <a href="#" onMouseDown={this.onDown} onMouseUp={this.onUp} onClick={(e) => {this.rightClicked(e)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.38 33.62">
                         <g>
                             <g>
