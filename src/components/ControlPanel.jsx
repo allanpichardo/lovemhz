@@ -32,7 +32,7 @@ export default class ControlPanel extends Component {
                     />
                 </div>
                 <div className="lpf">
-                    <LowpassFilter id="LPF" onFreqChanged={(freq) => this.props.onFreqChangedH(freq)} onPeakChanged={(peak) => this.props.onPeakChangedH(peak)}/>
+                    <LowpassFilter id="LPF" onFreqChanged={(freq) => this.props.onFreqChangedL(freq)} onPeakChanged={(peak) => this.props.onPeakChangedL(peak)}/>
                 </div>
                 <div className="hpf">
                     <HighpassFilter id="HPF" onFreqChanged={(freq) => this.props.onFreqChangedH(freq)} onPeakChanged={(peak) => this.props.onPeakChangedH(peak)}/>

@@ -29,7 +29,7 @@ export default class Synth extends Component {
             },
             lpf: {
                 type: 'lowpass',
-                freq: 22050,
+                freq: 8000,
                 peak: 1,
                 detune: 1200,
             },
@@ -91,28 +91,27 @@ export default class Synth extends Component {
 
         this.hpf1 = this.audioContext.createBiquadFilter();
         this.hpf1.type = this.state.hpf.type;
-        this.hpf1.detune.value = this.state.hpf.detune;
+        this.hpf1.detune.setValueAtTime(this.state.hpf.detune, this.audioContext.currentTime);
         this.hpf2 = this.audioContext.createBiquadFilter();
         this.hpf2.type = this.state.hpf.type;
-        this.hpf2.detune.value = this.state.hpf.detune;
+        this.hpf2.detune.setValueAtTime(this.state.hpf.detune, this.audioContext.currentTime);
 
         this.lpf1 = this.audioContext.createBiquadFilter();
         this.lpf1.type = this.state.lpf.type;
-        this.lpf1.detune.value = this.state.lpf.detune;
+        this.lpf1.detune.setValueAtTime(this.state.lpf.detune, this.audioContext.currentTime);
         this.lpf2 = this.audioContext.createBiquadFilter();
         this.lpf2.type = this.state.lpf.type;
-        this.lpf2.detune.value = this.state.lpf.detune;
-
+        this.lpf2.detune.setValueAtTime(this.state.lpf.detune, this.audioContext.currentTime);
         this.adsr = new ADSREnvelope(this.state.adsr);
 
-        this.hpf1.frequency.value = this.state.hpf.freq;
+        this.hpf1.frequency.setValueAtTime(this.state.hpf.freq, this.audioContext.currentTime);
         this.hpf1.Q.value = this.state.hpf.peak;
-        this.hpf2.frequency.value = this.state.hpf.freq;
+        this.hpf2.frequency.setValueAtTime(this.state.hpf.freq, this.audioContext.currentTime);
         this.hpf2.Q.value = this.state.hpf.peak;
 
-        this.lpf1.frequency.value = this.state.lpf.freq;
+        this.lpf1.frequency.setValueAtTime(this.state.lpf.freq, this.audioContext.currentTime);
         this.lpf1.Q.value = this.state.lpf.peak;
-        this.lpf2.frequency.value = this.state.lpf.freq;
+        this.lpf2.frequency.setValueAtTime(this.state.lpf.freq, this.audioContext.currentTime);
         this.lpf2.Q.value = this.state.lpf.peak;
 
         this.oscGain1.gain.value = this.state.osc1.mix;
@@ -139,21 +138,19 @@ export default class Synth extends Component {
             voice1.type = this.state.osc1.waveform;
 
             voice1.connect(this.hpf1);
-            voice1.connect(this.lpf2);
+            this.hpf1.connect(this.lpf1);
             this.lpf1.connect(this.oscGain1);
-            this.hpf1.connect(this.oscGain1);
 
             let voice2 = this.audioContext.createOscillator();
 
             voice2.type = this.state.osc2.waveform;
             voice2.connect(this.hpf2);
-            voice2.connect(this.lpf2);
+            this.hpf2.connect(this.lpf2);
             this.lpf2.connect(this.oscGain2);
-            this.hpf2.connect(this.oscGain2);
 
             let noteFreq = Calculations.textNoteToFrequency(notes);
-            voice1.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc1.octave);
-            voice2.frequency.value = Calculations.shiftToOctave(noteFreq, this.state.osc2.octave);
+            voice1.frequency.setValueAtTime(Calculations.shiftToOctave(noteFreq, this.state.osc1.octave), this.audioContext.currentTime);
+            voice2.frequency.setValueAtTime(Calculations.shiftToOctave(noteFreq, this.state.osc2.octave), this.audioContext.currentTime);
 
             return [voice1, voice2];
         }
@@ -209,25 +206,6 @@ export default class Synth extends Component {
             this.makeNote(channel3);
             this.makeNote(channel4);
 
-            // if(channel2) {
-            //     channel2[0].start(this.audioContext.currentTime);
-            //     channel2[1].start(this.audioContext.currentTime);
-            //     channel2[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            //     channel2[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            // }
-            // if(channel3) {
-            //     channel3[0].start(this.audioContext.currentTime);
-            //     channel3[1].start(this.audioContext.currentTime);
-            //     channel3[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            //     channel3[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            // }
-            // if(channel4) {
-            //     channel4[0].start(this.audioContext.currentTime);
-            //     channel4[1].start(this.audioContext.currentTime);
-            //     channel4[0].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            //     channel4[1].stop(this.audioContext.currentTime + Transport.bpmToS(this.state.bpm) + this.state.adsrDuration);
-            // }
-
         }catch (e) {
             console.log(e);
         }
@@ -258,7 +236,7 @@ export default class Synth extends Component {
         newState.osc1.mix = mix;
         this.setState(newState);
 
-        this.oscGain1.gain.value = mix;
+        this.oscGain1.gain.setValueAtTime(mix, this.audioContext.currentTime);
     }
 
     handleOctave1Changed(octave) {
@@ -278,7 +256,7 @@ export default class Synth extends Component {
         newState.osc2.mix = mix;
         this.setState(newState);
 
-        this.oscGain2.gain.value = mix;
+        this.oscGain2.gain.setValueAtTime(mix, this.audioContext.currentTime);
     }
 
     handleOctave2Changed(octave) {
@@ -288,8 +266,8 @@ export default class Synth extends Component {
     }
 
     handleFreqChangedH(freq, shouldSave) {
-        this.hpf1.frequency.value = freq;
-        this.hpf2.frequency.value = freq;
+        this.hpf1.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+        this.hpf2.frequency.setValueAtTime(freq, this.audioContext.currentTime);
 
         if(shouldSave) {
             let newState = Object.assign({}, this.state);
@@ -299,8 +277,8 @@ export default class Synth extends Component {
     }
 
     handlePeakChangedH(peak, shouldSave) {
-        this.hpf1.Q.value = peak;
-        this.hpf2.Q.value = peak;
+        this.hpf1.Q.setValueAtTime(peak, this.audioContext.currentTime);
+        this.hpf2.Q.setValueAtTime(peak, this.audioContext.currentTime);
 
         if(shouldSave) {
             let newState = Object.assign({}, this.state);
@@ -310,8 +288,8 @@ export default class Synth extends Component {
     }
 
     handleFreqChangedL(freq, shouldSave) {
-        this.lpf1.frequency.value = freq;
-        this.lpf2.frequency.value = freq;
+        this.lpf1.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+        this.lpf2.frequency.setValueAtTime(freq, this.audioContext.currentTime);
 
         if(shouldSave) {
             let newState = Object.assign({}, this.state);
@@ -321,8 +299,8 @@ export default class Synth extends Component {
     }
 
     handlePeakChangedL(peak, shouldSave) {
-        this.lpf1.Q.value = peak;
-        this.lpf2.Q.value = peak;
+        this.lpf1.Q.setValueAtTime(peak, this.audioContext.currentTime);
+        this.lpf2.Q.setValueAtTime(peak, this.audioContext.currentTime);
 
         if(shouldSave) {
             let newState = Object.assign({}, this.state);
