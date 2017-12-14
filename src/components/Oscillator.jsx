@@ -25,7 +25,10 @@ export default class Oscillator extends Component {
 
         $(`#${this.state.knobId}`).knob({
             'change' : (v) => {
-                this.handleMixChange(v)
+                this.handleMixChange(v, false)
+            },
+            'release' : (v) => {
+                this.handleMixChange(v, true)
             }
         });
 
@@ -65,7 +68,7 @@ export default class Oscillator extends Component {
                 <div className="mix">
                     <p>Mix</p>
                     <input type="text" value={this.state.mix} id={this.state.knobId} className="knob" data-width="70"
-                           data-height="70" data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="true" data-max="15" data-angleOffset="180"
+                           data-height="70" data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-max="15" data-angleOffset="180"
                     />
                 </div>
                 <div className="oct">
@@ -103,7 +106,7 @@ export default class Oscillator extends Component {
         this.props.onWaveformChanged(waveform);
     }
 
-    handleMixChange(v) {
+    handleMixChange(v, shouldSave) {
 
         let mix = v/100;
         this.setState({
@@ -111,7 +114,7 @@ export default class Oscillator extends Component {
         }, ()=>{
             this.saveState()
         });
-        this.props.onMixChanged(mix);
+        this.props.onMixChanged(mix, shouldSave);
     }
 
     handleOctaveChanged(val) {

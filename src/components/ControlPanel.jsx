@@ -19,7 +19,7 @@ export default class ControlPanel extends Component {
                     <Oscillator id="OSC-1"
                                 defaultWav="∿" defaultMix={10} defaultOctave={2}
                                 onWaveformChanged={(waveform) => {this.props.onWaveformChanged1(waveform)}}
-                                onMixChanged={(mix) => {this.props.onMixChanged1(mix)}}
+                                onMixChanged={(mix, shouldSave) => {this.props.onMixChanged1(mix, shouldSave)}}
                                 onOctaveChanged={(octave) => {this.props.onOctaveChanged1(octave)}}
                     />
                 </div>
@@ -27,7 +27,7 @@ export default class ControlPanel extends Component {
                     <Oscillator id="OSC-2"
                                 defaultWav="⊿" defaultMix={10} defaultOctave={4}
                                 onWaveformChanged={(waveform) => {this.props.onWaveformChanged2(waveform)}}
-                                onMixChanged={(mix) => {this.props.onMixChanged2(mix)}}
+                                onMixChanged={(mix, shouldSave) => {this.props.onMixChanged2(mix, shouldSave)}}
                                 onOctaveChanged={(octave) => {this.props.onOctaveChanged2(octave)}}
                     />
                 </div>
@@ -38,7 +38,10 @@ export default class ControlPanel extends Component {
                     <HighpassFilter id="HPF" onFreqChanged={(freq) => this.props.onFreqChangedH(freq)} onPeakChanged={(peak) => this.props.onPeakChangedH(peak)}/>
                 </div>
                 <div className="adsr">
-                    <ADSR id="ADSR"/>
+                    <ADSR id="ADSR" onAttackChanged={(v, shouldSave) => {this.props.onAttackChanged(v, shouldSave)}}
+                          onDecayChanged={(v, shouldSave) => {this.props.onDecayChanged(v, shouldSave)}}
+                          onSustainChanged={(v, shouldSave) => {this.props.onSustainChanged(v, shouldSave)}}
+                          onReleaseChanged={(v, shouldSave) => {this.props.onReleaseChanged(v, shouldSave)}} />
                 </div>
             </div>
         );

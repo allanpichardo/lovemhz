@@ -61,6 +61,10 @@ export default class Synth extends Component {
         this.handleFreqChangedH = this.handleFreqChangedH.bind(this);
         this.handlePeakChangedH = this.handlePeakChangedH.bind(this);
         this.makeNote = this.makeNote.bind(this);
+        this.handleAttackChanged = this.handleAttackChanged.bind(this);
+        this.handleDecayChanged = this.handleDecayChanged.bind(this);
+        this.handleSustainChanged = this.handleSustainChanged.bind(this);
+        this.handleReleaseChanged = this.handleReleaseChanged.bind(this);
     }
 
     componentDidMount() {
@@ -76,11 +80,16 @@ export default class Synth extends Component {
 
     }
 
+    componentDidUpdate() {
+
+    }
+
     initializeAudio() {
         const options = {
-            latencyHint: 'interactive',
+            latencyHint: 'balanced',
             sampleRate: 44100,
         };
+
         if ('webkitAudioContext' in window) {
             this.audioContext = new window.webkitAudioContext(options);
         } else {
@@ -102,6 +111,7 @@ export default class Synth extends Component {
         this.lpf2 = this.audioContext.createBiquadFilter();
         this.lpf2.type = this.state.lpf.type;
         this.lpf2.detune.setValueAtTime(this.state.lpf.detune, this.audioContext.currentTime);
+
         this.adsr = new ADSREnvelope(this.state.adsr);
 
         this.hpf1.frequency.setValueAtTime(this.state.hpf.freq, this.audioContext.currentTime);
@@ -231,12 +241,14 @@ export default class Synth extends Component {
         this.setState(newState);
     }
 
-    handleMix1Changed(mix) {
-        let newState = Object.assign({}, this.state);
-        newState.osc1.mix = mix;
-        this.setState(newState);
+    handleMix1Changed(mix, shouldSave) {
+        this.oscGain1.gain.value = mix;
 
-        this.oscGain1.gain.setValueAtTime(mix, this.audioContext.currentTime);
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.osc1.mix = mix;
+            this.setState(newState);
+        }
     }
 
     handleOctave1Changed(octave) {
@@ -251,12 +263,14 @@ export default class Synth extends Component {
         this.setState(newState);
     }
 
-    handleMix2Changed(mix) {
-        let newState = Object.assign({}, this.state);
-        newState.osc2.mix = mix;
-        this.setState(newState);
+    handleMix2Changed(mix, shouldSave) {
+        this.oscGain2.gain.value = mix;
 
-        this.oscGain2.gain.setValueAtTime(mix, this.audioContext.currentTime);
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.osc2.mix = mix;
+            this.setState(newState);
+        }
     }
 
     handleOctave2Changed(octave) {
@@ -335,19 +349,63 @@ export default class Synth extends Component {
         });
     }
 
+    handleAttackChanged(value, shouldSave) {
+        this.adsr.attackTime = value;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.adsr.attackTime = value;
+            this.setState(newState);
+        }
+    }
+
+    handleDecayChanged(value, shouldSave) {
+        this.adsr.decayTime = value;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.adsr.decayTime = value;
+            this.setState(newState);
+        }
+    }
+
+    handleSustainChanged(value, shouldSave) {
+        this.adsr.sustainTime = value;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.adsr.sustainTime = value;
+            this.setState(newState);
+        }
+    }
+
+    handleReleaseChanged(value, shouldSave) {
+        this.adsr.releaseTime = value;
+
+        if(shouldSave) {
+            let newState = Object.assign({}, this.state);
+            newState.adsr.releaseTime = value;
+            this.setState(newState);
+        }
+    }
+
     getControlsTab() {
         return (
             <div className="content">
                 <ControlPanel onWaveformChanged1={(waveform) => {this.handleWaveform1Changed(waveform)}}
-                              onMixChanged1={(mix) => {this.handleMix1Changed(mix)}}
+                              onMixChanged1={(mix, shouldSave) => {this.handleMix1Changed(mix, shouldSave)}}
                               onOctaveChanged1={(octave) => {this.handleOctave1Changed(octave)}}
                               onWaveformChanged2={(waveform) => {this.handleWaveform2Changed(waveform)}}
-                              onMixChanged2={(mix) => {this.handleMix2Changed(mix)}}
+                              onMixChanged2={(mix, shouldSave) => {this.handleMix2Changed(mix, shouldSave)}}
                               onOctaveChanged2={(octave) => {this.handleOctave2Changed(octave)}}
                               onFreqChangedH={(freq, shouldSave) => this.handleFreqChangedH(freq, shouldSave)}
                               onPeakChangedH={(peak, shouldSave) => this.handlePeakChangedH(peak, shouldSave)}
                               onFreqChangedL={(freq, shouldSave) => this.handleFreqChangedL(freq, shouldSave)}
                               onPeakChangedL={(peak, shouldSave) => this.handlePeakChangedL(peak, shouldSave)}
+                              onAttackChanged={(v, shouldSave) => {this.handleAttackChanged(v, shouldSave)}}
+                              onDecayChanged={(v, shouldSave) => {this.handleDecayChanged(v, shouldSave)}}
+                              onSustainChanged={(v, shouldSave) => {this.handleSustainChanged(v, shouldSave)}}
+                              onReleaseChanged={(v, shouldSave) => {this.handleReleaseChanged(v, shouldSave)}}
                 />
             </div>
         )
