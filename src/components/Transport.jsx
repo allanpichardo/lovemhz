@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'font-awesome/css/font-awesome.min.css'
 import 'jquery-knob';
 import TransportButton from "./TransportButton.jsx";
-import Timer from '../utility/Timer';
+import * as Timer from 'audio-context-timers';
 import Stepper from "./Stepper";
 
 export default class Transport extends Component {
@@ -11,8 +11,8 @@ export default class Transport extends Component {
         super(props);
 
         this.state = {
+            intervalId: null,
             isRunning: false,
-            timer: null,
             step: 0,
             bpm: 120,
             steps: this.props.steps ? this.props.steps : 16,
@@ -44,23 +44,22 @@ export default class Transport extends Component {
             bpm: bpm,
         });
 
-        let timer = this.state.timer;
         let sequenceTime = Transport.bpmToMs(bpm);
 
-        if(timer) {
-            timer.interval = sequenceTime;
+        if(this.state.intervalId) {
+            Timer.clearInterval(this.state.intervalId);
+            let intervalId = Timer.setInterval(() => {
+                this.handleTick();
+            }, sequenceTime);
 
-            let newState = {
-                step: this.state.step,
-                steps: this.state.steps,
-                bpm: this.state.bpm,
-                timer : timer,
-            };
-            this.setState(newState);
+            this.setState({
+                intervalId: intervalId
+            })
         }
     }
 
     handleStop() {
+        this.handleTransportToggle(false);
         this.handleRunningChange(false);
         this.setState({
             isRunning: false,
@@ -69,30 +68,28 @@ export default class Transport extends Component {
     }
 
     handleTransportToggle = (isStarted) => {
-        let timer = this.state.timer;
         let sequenceTime = Transport.bpmToMs(this.state.bpm);
 
         if(isStarted) {
-            timer = new Timer(() => {
+            let intervalId = Timer.setInterval(() => {
                 this.handleTick();
             }, sequenceTime);
-            timer.start();
+
+            this.setState({
+                intervalId: intervalId
+            });
         } else {
-            if(timer) {
-                timer.stop();
-                timer = null;
-            }
-            if(this.props.onPaused) {
-                this.props.onPaused();
+            if(this.state.intervalId !== null) {
+                Timer.clearInterval(this.state.intervalId);
+
+                this.setState({
+                    intervalId: null,
+                });
             }
         }
 
         let newState = {
             isRunning: true,
-            step: this.state.step,
-            steps: this.state.steps,
-            bpm: this.state.bpm,
-            timer : timer,
         };
         this.setState(newState);
 
@@ -128,9 +125,6 @@ export default class Transport extends Component {
 
         let newState = {
             step: step,
-            bpm: this.state.bpm,
-            steps: this.state.steps,
-            timer : this.state.timer,
         };
         this.setState(newState);
     }

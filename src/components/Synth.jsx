@@ -18,32 +18,34 @@ export default class Synth extends Component {
             bpm: 120,
             sequence: [ [],[],[],[] ],
             osc1: {
-                mix: 0.25,
+                mix: 0.10,
                 waveform: 'sine',
                 octave: 2,
             },
             osc2: {
-                mix: 0.25,
+                mix: 0.10,
                 waveform: 'triangle',
                 octave: 4,
             },
             lpf: {
                 type: 'lowpass',
                 freq: 22050,
-                peak: 1
+                peak: 1,
+                detune: 1200,
             },
             hpf: {
                 type: 'highpass',
                 freq: 0,
-                peak: 1
+                peak: 1,
+                detune: 1200,
             },
             adsr: {
-                attackTime: 0.1,
+                attackTime: 0.25,
                 decayTime: 0.25,
                 sustainLevel: 0.2,
-                releaseTime: 0,
+                releaseTime: .25,
                 gateTime: .6,
-                peakLevel: 0.25,
+                peakLevel: 0.15,
                 releaseCurve: "exp",
             },
             tab: 'sequencer',
@@ -75,7 +77,10 @@ export default class Synth extends Component {
     }
 
     initializeAudio() {
-        const options = {latencyHint: 'balanced'};
+        const options = {
+            latencyHint: 'interactive',
+            sampleRate: 44100,
+        };
         if ('webkitAudioContext' in window) {
             this.audioContext = new window.webkitAudioContext(options);
         } else {
@@ -86,13 +91,17 @@ export default class Synth extends Component {
 
         this.hpf1 = this.audioContext.createBiquadFilter();
         this.hpf1.type = this.state.hpf.type;
+        this.hpf1.detune.value = this.state.hpf.detune;
         this.hpf2 = this.audioContext.createBiquadFilter();
         this.hpf2.type = this.state.hpf.type;
+        this.hpf2.detune.value = this.state.hpf.detune;
 
         this.lpf1 = this.audioContext.createBiquadFilter();
         this.lpf1.type = this.state.lpf.type;
+        this.lpf1.detune.value = this.state.lpf.detune;
         this.lpf2 = this.audioContext.createBiquadFilter();
         this.lpf2.type = this.state.lpf.type;
+        this.lpf2.detune.value = this.state.lpf.detune;
 
         this.adsr = new ADSREnvelope(this.state.adsr);
 
@@ -178,6 +187,13 @@ export default class Synth extends Component {
 
             voices[0].stop(this.audioContext.currentTime + envelope11.duration);
             voices[1].stop(this.audioContext.currentTime + envelope12.duration);
+
+            voices[0].onended = () => {
+                voices[0] = null;
+            };
+            voices[1].onended = () => {
+                voices[1] = null;
+            };
         }
     }
 
