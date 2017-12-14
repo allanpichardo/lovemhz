@@ -21,7 +21,7 @@ export default class Sequencer extends Component {
 
 
         this.state = {
-            notes: this.props.initialSequence ? this.props.initialSequence : this.initNoteMatrix(),
+            notes: this.initNoteMatrix(),
             tonesForTrack: ['C', 'C', 'C', 'C'],
             offsets: [0,0,0,0]
         };

@@ -12,6 +12,45 @@ export default class Synth extends Component {
     constructor(props) {
         super(props);
 
+        this.defaultState = {
+            isRunning: false,
+            step: 0,
+            bpm: 120,
+            sequence: [ [],[],[],[] ],
+            osc1: {
+                mix: 0.10,
+                waveform: 'sine',
+                octave: 2,
+            },
+            osc2: {
+                mix: 0.10,
+                waveform: 'triangle',
+                octave: 4,
+            },
+            lpf: {
+                type: 'lowpass',
+                freq: 8000,
+                peak: 1,
+                detune: 0,
+            },
+            hpf: {
+                type: 'highpass',
+                freq: 0,
+                peak: 1,
+                detune: 0,
+            },
+            adsr: {
+                attackTime: 0.25,
+                decayTime: 0.25,
+                sustainLevel: 0.2,
+                releaseTime: .25,
+                gateTime: .6,
+                peakLevel: 0.15,
+                releaseCurve: "exp",
+            },
+            tab: 'sequencer',
+        };
+
         this.state = {
             isRunning: false,
             step: 0,
@@ -71,17 +110,16 @@ export default class Synth extends Component {
         this.initializeAudio();
 
         let savedState = JSON.parse(sessionStorage.getItem('Synth'));
-        if(savedState) {
-            this.setState(savedState);
+        if(savedState && savedState !== this.defaultState) {
+            this.setState(savedState, () => {
 
-            this.handleTabSelected(document.querySelector(`.${savedState.tab}`));
-
+            });
         }
 
     }
 
     componentDidUpdate() {
-
+        this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
     }
 
     initializeAudio() {
@@ -136,8 +174,10 @@ export default class Synth extends Component {
     }
 
     saveState(state) {
-        let stateJson = JSON.stringify(state);
-        sessionStorage.setItem('Synth', stateJson);
+        if(state !== this.defaultState) {
+            let stateJson = JSON.stringify(state);
+            sessionStorage.setItem('Synth', stateJson);
+        }
     }
 
     getVoicesFor(channel) {
@@ -327,14 +367,16 @@ export default class Synth extends Component {
         //todo: something when paused
     }
 
-    handleTabSelected(element) {
+    handleTabSelected(element, skipUpdate) {
         element.classList.add('tab_selected');
 
-        let newState = Object.assign({}, this.state);
-        newState.tab = element.classList[1];
-        this.setState(newState);
+        if(!skipUpdate) {
+            let newState = Object.assign({}, this.state);
+            newState.tab = element.classList[1];
+            this.setState(newState);
 
-        this.saveState(newState);
+            this.saveState(newState);
+        }
     }
 
     handleTransportStateChanged(isRunning) {

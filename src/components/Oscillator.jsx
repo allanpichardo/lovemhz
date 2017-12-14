@@ -126,4 +126,5 @@ export default class Oscillator extends Component {
         });
         this.props.onOctaveChanged(val)
     }
+
 }
