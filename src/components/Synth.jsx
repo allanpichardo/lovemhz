@@ -84,14 +84,10 @@ export default class Synth extends Component {
 
     }
 
-    componentDidUpdate() {
-        //this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
-    }
-
     initializeAudio() {
         const options = {
-            latencyHint: 'balanced',
-            sampleRate: 44010,
+            latencyHint: 'playback',
+            sampleRate: 22050,
         };
 
         if ('webkitAudioContext' in window) {
@@ -183,14 +179,16 @@ export default class Synth extends Component {
     makeNote(voices, when) {
         if(voices) {
 
+            let gateTime = Transport.bpmToS(this.state.bpm);
+
             let envelope11 = this.adsr.clone();
             let envelope12 = this.adsr.clone();
 
             envelope11.peakLevel = this.state.osc1.mix;
-            envelope11.gateTime = Transport.bpmToS(this.state.bpm);
+            envelope11.gateTime = gateTime;
 
             envelope12.peakLevel = this.state.osc2.mix;
-            envelope12.gateTime = Transport.bpmToS(this.state.bpm);
+            envelope12.gateTime = gateTime;
 
             envelope11.applyTo(this.oscGain1.gain, when);
             envelope12.applyTo(this.oscGain2.gain, when);
@@ -204,15 +202,9 @@ export default class Synth extends Component {
             envelope11.applyTo(this.oscGain1.gain, when);
             envelope12.applyTo(this.oscGain2.gain, when);
 
-            voices[0].stop(when + envelope11.duration);
-            voices[1].stop(when + envelope12.duration);
+            voices[0].stop(when + envelope11.duration + gateTime);
+            voices[1].stop(when + envelope12.duration + gateTime);
 
-            voices[0].onended = () => {
-                voices[0] = null;
-            };
-            voices[1].onended = () => {
-                voices[1] = null;
-            };
         }
     }
 
