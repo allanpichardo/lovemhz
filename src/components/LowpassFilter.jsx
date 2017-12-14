@@ -9,6 +9,8 @@ export default class LowpassFilter extends Component {
         super(props);
 
         this.state = {
+            peakKnobId: `peak-lpf-${this.props.id}`,
+            freqKnobId: `freq-lpf-${this.props.id}`,
             id : props.id,
             frequency: 8000,
             peak: 1,
@@ -16,10 +18,11 @@ export default class LowpassFilter extends Component {
 
         this.handleFreqChanged = this.handleFreqChanged.bind(this);
         this.handlePeakChanged = this.handlePeakChanged.bind(this);
+        this.saveState = this.saveState.bind(this);
     }
 
     componentDidMount() {
-        $(`#peak-lpf-${this.state.id}`).knob({
+        $('#'+this.state.peakKnobId).knob({
             'change' : (v) => {
                 this.handlePeakChanged(v, false)
             },
@@ -27,7 +30,7 @@ export default class LowpassFilter extends Component {
                 this.handlePeakChanged(v, true)
             }
         });
-        $(`#freq-lpf-${this.state.id}`).knob({
+        $('#'+this.state.freqKnobId).knob({
             'change' : (v) => {
                 this.handleFreqChanged(v, false)
             },
@@ -35,6 +38,25 @@ export default class LowpassFilter extends Component {
                 this.handleFreqChanged(v, true)
             }
         });
+
+        let savedState = JSON.parse(sessionStorage.getItem(this.props.id));
+        if(savedState) {
+            this.setState(savedState);
+        }
+    }
+
+    componentDidUpdate() {
+        $('#'+this.state.freqKnobId).trigger('blur');
+        $('#'+this.state.peakKnobId).trigger('blur');
+    }
+
+    componentWillUnmount() {
+        this.saveState();
+    }
+
+    saveState() {
+        let state = JSON.stringify(this.state);
+        sessionStorage.setItem(this.props.id, state);
     }
 
     render() {
@@ -45,12 +67,12 @@ export default class LowpassFilter extends Component {
                 </div>
                 <div className="freq">
                     <p>Freq</p>
-                    <input type="text" value={this.state.frequency} step="1" id={`freq-lpf-${this.state.id}`} className="knob" data-width="70" data-max="8000"
+                    <input type="text" value={this.state.frequency} step="1" id={this.state.freqKnobId} className="knob" data-width="70" data-max="8000"
                            data-min="0" data-height="70"  data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-angleOffset="180"/>
                 </div>
                 <div className="peak">
                     <p>Peak</p>
-                    <input type="text" value={this.state.peak} id={`peak-lpf-${this.state.id}`} className="knob" data-width="50" data-max="25"
+                    <input type="text" value={this.state.peak} id={this.state.peakKnobId} className="knob" data-width="50" data-max="25"
                            data-height="50"  data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-angleOffset="180"/>
                 </div>
             </div>

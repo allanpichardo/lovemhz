@@ -9,6 +9,8 @@ export default class HighpassFilter extends Component {
         super(props);
 
         this.state = {
+            peakKnobId: `peak-hpf-${this.props.id}`,
+            freqKnobId: `freq-hpf-${this.props.id}`,
             id : props.id,
             frequency: 0,
             peak: 1,
@@ -16,18 +18,11 @@ export default class HighpassFilter extends Component {
 
         this.handleFreqChanged = this.handleFreqChanged.bind(this);
         this.handlePeakChanged = this.handlePeakChanged.bind(this);
+        this.saveState = this.saveState.bind(this);
     }
 
     componentDidMount() {
-        $(`#freq-hpf-${this.state.id}`).knob({
-            'change' : (v) => {
-                this.handleFreqChanged(v, false)
-            },
-            'release' : (v) => {
-                this.handleFreqChanged(v, true)
-            }
-        });
-        $(`#peak-hpf-${this.state.id}`).knob({
+        $('#'+this.state.peakKnobId).knob({
             'change' : (v) => {
                 this.handlePeakChanged(v, false)
             },
@@ -35,6 +30,33 @@ export default class HighpassFilter extends Component {
                 this.handlePeakChanged(v, true)
             }
         });
+        $('#'+this.state.freqKnobId).knob({
+            'change' : (v) => {
+                this.handleFreqChanged(v, false)
+            },
+            'release' : (v) => {
+                this.handleFreqChanged(v, true)
+            }
+        });
+
+        let savedState = JSON.parse(sessionStorage.getItem(this.props.id));
+        if(savedState) {
+            this.setState(savedState);
+        }
+    }
+
+    componentDidUpdate() {
+        $('#'+this.state.freqKnobId).trigger('blur');
+        $('#'+this.state.peakKnobId).trigger('blur');
+    }
+
+    componentWillUnmount() {
+        this.saveState();
+    }
+
+    saveState() {
+        let state = JSON.stringify(this.state);
+        sessionStorage.setItem(this.props.id, state);
     }
 
     render() {
@@ -43,12 +65,12 @@ export default class HighpassFilter extends Component {
                 <div className="ttl"><h3 className="panel_title">{this.state.id}</h3></div>
                 <div className="freq">
                     <p>Freq</p>
-                    <input type="text" value="0" step="1" id={`freq-hpf-${this.state.id}`} className="knob" data-width="70" data-max="200"
+                    <input type="text" value={this.state.frequency} step="1" id={this.state.freqKnobId} className="knob" data-width="70" data-max="200"
                            data-min="0" data-height="70" data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-angleOffset="180"/>
                 </div>
                 <div className="peak">
                     <p>Peak</p>
-                    <input type="text" value="1" step="1" id={`peak-hpf-${this.state.id}`} className="knob" data-width="50" data-max="25"
+                    <input type="text" value={this.state.peak} step="1" id={this.state.peakKnobId} className="knob" data-width="50" data-max="25"
                            data-height="50"  data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-angleOffset="180"/>
                 </div>
             </div>
