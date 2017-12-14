@@ -14,7 +14,7 @@ export default class Transport extends Component {
             intervalId: null,
             isRunning: false,
             step: 0,
-            bpm: 120,
+            bpm: 180,
             steps: this.props.steps ? this.props.steps : 16,
         };
 

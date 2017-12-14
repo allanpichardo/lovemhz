@@ -15,7 +15,7 @@ export default class Synth extends Component {
         this.defaultState = {
             isRunning: false,
             step: 0,
-            bpm: 120,
+            bpm: 180,
             sequence: [ [],[],[],[] ],
             osc1: {
                 mix: 0.10,
@@ -54,7 +54,7 @@ export default class Synth extends Component {
         this.state = {
             isRunning: false,
             step: 0,
-            bpm: 120,
+            bpm: 200,
             sequence: [ [],[],[],[] ],
             osc1: {
                 mix: 0.10,
