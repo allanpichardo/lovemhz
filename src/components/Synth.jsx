@@ -13,6 +13,7 @@ export default class Synth extends Component {
         super(props);
 
         this.defaultState = {
+            scheduleAhead: 0,
             isRunning: false,
             step: 0,
             bpm: 180,
@@ -40,10 +41,10 @@ export default class Synth extends Component {
                 detune: 0,
             },
             adsr: {
-                attackTime: 0.25,
+                attackTime: 0.1,
                 decayTime: 0.25,
                 sustainLevel: 0.2,
-                releaseTime: .25,
+                releaseTime: .1,
                 gateTime: .6,
                 peakLevel: 0.15,
                 releaseCurve: "exp",
@@ -51,44 +52,7 @@ export default class Synth extends Component {
             tab: 'sequencer',
         };
 
-        this.state = {
-            isRunning: false,
-            step: 0,
-            bpm: 200,
-            sequence: [ [],[],[],[] ],
-            osc1: {
-                mix: 0.10,
-                waveform: 'sine',
-                octave: 2,
-            },
-            osc2: {
-                mix: 0.10,
-                waveform: 'triangle',
-                octave: 4,
-            },
-            lpf: {
-                type: 'lowpass',
-                freq: 8000,
-                peak: 1,
-                detune: 0,
-            },
-            hpf: {
-                type: 'highpass',
-                freq: 0,
-                peak: 1,
-                detune: 0,
-            },
-            adsr: {
-                attackTime: 0.25,
-                decayTime: 0.25,
-                sustainLevel: 0.2,
-                releaseTime: .25,
-                gateTime: .6,
-                peakLevel: 0.15,
-                releaseCurve: "exp",
-            },
-            tab: 'sequencer',
-        };
+        this.state = Object.assign({}, this.defaultState);
 
         this.handleTick = this.handleTick.bind(this);
         this.playStep = this.playStep.bind(this);
@@ -112,21 +76,22 @@ export default class Synth extends Component {
         let savedState = JSON.parse(sessionStorage.getItem('Synth'));
         if(savedState && savedState !== this.defaultState) {
             this.setState(savedState, () => {
-
+                this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
             });
+        } else {
+            document.querySelector('.sequencer').classList.add('tab_selected');
         }
 
-        this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
     }
 
     componentDidUpdate() {
-        this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
+        //this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
     }
 
     initializeAudio() {
         const options = {
             latencyHint: 'balanced',
-            sampleRate: 44100,
+            sampleRate: 44010,
         };
 
         if ('webkitAudioContext' in window) {
@@ -166,8 +131,14 @@ export default class Synth extends Component {
         this.oscGain1.gain.value = this.state.osc1.mix;
         this.oscGain2.gain.value = this.state.osc2.mix;
 
-        this.oscGain1.connect(this.audioContext.destination);
-        this.oscGain2.connect(this.audioContext.destination);
+        this.merger = this.audioContext.createChannelMerger(2);
+
+        this.oscGain1.connect(this.merger, 0,0);
+        this.oscGain2.connect(this.merger, 0,0);
+        this.oscGain1.connect(this.merger, 0,1);
+        this.oscGain2.connect(this.merger, 0,1);
+
+        this.merger.connect(this.audioContext.destination);
     }
 
     componentWillUnmount() {
@@ -181,8 +152,8 @@ export default class Synth extends Component {
         }
     }
 
-    getVoicesFor(channel) {
-        let notes = this.state.sequence[channel - 1][this.state.step];
+    getVoicesFor(channel, step) {
+        let notes = this.state.sequence[channel - 1][step];
         if(notes) {
 
             let voice1 = this.audioContext.createOscillator();
@@ -209,7 +180,7 @@ export default class Synth extends Component {
         return null;
     }
 
-    makeNote(voices) {
+    makeNote(voices, when) {
         if(voices) {
 
             let envelope11 = this.adsr.clone();
@@ -221,20 +192,20 @@ export default class Synth extends Component {
             envelope12.peakLevel = this.state.osc2.mix;
             envelope12.gateTime = Transport.bpmToS(this.state.bpm);
 
-            envelope11.applyTo(this.oscGain1.gain, this.audioContext.currentTime);
-            envelope12.applyTo(this.oscGain2.gain, this.audioContext.currentTime);
+            envelope11.applyTo(this.oscGain1.gain, when);
+            envelope12.applyTo(this.oscGain2.gain, when);
 
-            voices[0].start(this.audioContext.currentTime);
-            voices[1].start(this.audioContext.currentTime);
+            voices[0].start(when);
+            voices[1].start(when);
 
-            this.oscGain1.gain.cancelScheduledValues(this.audioContext.currentTime);
-            this.oscGain2.gain.cancelScheduledValues(this.audioContext.currentTime);
+            this.oscGain1.gain.cancelScheduledValues(when);
+            this.oscGain2.gain.cancelScheduledValues(when);
 
-            envelope11.applyTo(this.oscGain1.gain, this.audioContext.currentTime);
-            envelope12.applyTo(this.oscGain2.gain, this.audioContext.currentTime);
+            envelope11.applyTo(this.oscGain1.gain, when);
+            envelope12.applyTo(this.oscGain2.gain, when);
 
-            voices[0].stop(this.audioContext.currentTime + envelope11.duration);
-            voices[1].stop(this.audioContext.currentTime + envelope12.duration);
+            voices[0].stop(when + envelope11.duration);
+            voices[1].stop(when + envelope12.duration);
 
             voices[0].onended = () => {
                 voices[0] = null;
@@ -245,17 +216,23 @@ export default class Synth extends Component {
         }
     }
 
-    playStep() {
+    playStep(step) {
         try {
-            let channel1 = this.getVoicesFor(1);
-            let channel2 = this.getVoicesFor(2);
-            let channel3 = this.getVoicesFor(3);
-            let channel4 = this.getVoicesFor(4);
 
-            this.makeNote(channel1);
-            this.makeNote(channel2);
-            this.makeNote(channel3);
-            this.makeNote(channel4);
+            let time = this.audioContext.currentTime;
+            let nextTime = time + Transport.bpmToS(this.state.bpm);
+
+            let channel1 = this.getVoicesFor(1, step);
+            let channel2 = this.getVoicesFor(2, step);
+            let channel3 = this.getVoicesFor(3, step);
+            let channel4 = this.getVoicesFor(4, step);
+
+            this.makeNote(channel1, time);
+            this.makeNote(channel2, time);
+            this.makeNote(channel3, time);
+            this.makeNote(channel4, time);
+
+
 
         }catch (e) {
             console.log(e);
@@ -271,9 +248,11 @@ export default class Synth extends Component {
     handleTick(step) {
         let newState = Object.assign({}, this.state);
         newState.step = step;
-        this.setState(newState);
+        this.setState(newState, () => {
 
-        this.playStep()
+        });
+
+        this.playStep(step);
     }
 
     handleWaveform1Changed(waveform) {

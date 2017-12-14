@@ -10,10 +10,10 @@ export default class ADSR extends Component {
 
         this.state = {
             id : props.id,
-            attack: 25,
+            attack: 10,
             decay: 25,
             sustain: 20,
-            release: 25,
+            release: 10,
         };
 
         this.handleAttackChanged = this.handleAttackChanged.bind(this);
