@@ -31,13 +31,13 @@ export default class Synth extends Component {
                 type: 'lowpass',
                 freq: 8000,
                 peak: 1,
-                detune: 1200,
+                detune: 0,
             },
             hpf: {
                 type: 'highpass',
                 freq: 0,
                 peak: 1,
-                detune: 1200,
+                detune: 0,
             },
             adsr: {
                 attackTime: 0.25,

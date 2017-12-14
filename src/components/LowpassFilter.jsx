@@ -50,7 +50,7 @@ export default class LowpassFilter extends Component {
                 </div>
                 <div className="peak">
                     <p>Peak</p>
-                    <input type="text" value={this.state.peak} id={`peak-lpf-${this.state.id}`} className="knob" data-width="50" data-max="50"
+                    <input type="text" value={this.state.peak} id={`peak-lpf-${this.state.id}`} className="knob" data-width="50" data-max="25"
                            data-height="50"  data-fgColor="#c20097" data-bgColor="#044f4d" data-displayInput="false" data-angleOffset="180"/>
                 </div>
             </div>
@@ -65,6 +65,9 @@ export default class LowpassFilter extends Component {
     }
 
     handlePeakChanged(v, shouldSave) {
+        this.setState({
+            peak: v,
+        });
         this.props.onPeakChanged(v, shouldSave);
     }
 }
