@@ -116,6 +116,7 @@ export default class Synth extends Component {
             });
         }
 
+        this.handleTabSelected(document.querySelector(`.${this.state.tab}`), true);
     }
 
     componentDidUpdate() {

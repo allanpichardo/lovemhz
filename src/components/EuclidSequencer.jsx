@@ -19,6 +19,11 @@ export default class Sequencer extends Component {
 
         this.onsetSteppers = [null, null, null, null];
 
+        this.defaultState = {
+            notes: this.initNoteMatrix(),
+            tonesForTrack: ['C', 'C', 'C', 'C'],
+            offsets: [0,0,0,0]
+        };
 
         this.state = {
             notes: this.initNoteMatrix(),
@@ -30,14 +35,16 @@ export default class Sequencer extends Component {
     componentDidMount() {
         let savedState = sessionStorage.getItem('EuclidSequencer');
         savedState = JSON.parse(savedState);
-        if(savedState) {
+        if(savedState !== this.defaultState) {
             this.setState(savedState);
         }
     }
 
     componentWillUnmount() {
-        let stateJson = JSON.stringify(this.state);
-        sessionStorage.setItem('EuclidSequencer', stateJson);
+        if(this.state !== this.defaultState) {
+            let stateJson = JSON.stringify(this.state);
+            sessionStorage.setItem('EuclidSequencer', stateJson);
+        }
     }
 
     initNoteMatrix() {
