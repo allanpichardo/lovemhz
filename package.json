@@ -16,7 +16,7 @@
     "react-dom": "^16.12.0",
     "react-scripts": "^3.3.0"
   },
-  "homepage": "https://allanpichardo.github.io/lovemhz",
+  "homepage": "https://lovemhz.allanpichardo.com",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
