@@ -7,6 +7,8 @@
     "adsr-envelope": "^1.0.0",
     "audio-context-timers": "^2.1.93",
     "bulma": "^0.6.2",
+    "cross-env": "^7.0.0",
+    "electron-is-dev": "^1.1.0",
     "euclidean-rhythms": "^2.0.1",
     "font-awesome": "^4.7.0",
     "gh-pages": "^1.2.0",
@@ -16,14 +18,17 @@
     "react-dom": "^16.12.0",
     "react-scripts": "^3.3.0"
   },
-  "homepage": "https://lovemhz.allanpichardo.com",
+  "homepage": ".",
+  "main": "public/electron.js",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron-start": "concurrently \"cross-env BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-build": "npm run build && electron-builder"
   },
   "browserslist": {
     "production": [
@@ -36,5 +41,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0",
+    "electron": "^8.0.0",
+    "electron-builder": "^22.3.2",
+    "wait-on": "^4.0.0"
   }
 }
